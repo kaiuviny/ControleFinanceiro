@@ -36,9 +36,11 @@ class Despesas_FixasModel{
         $dao = new Despesas_FixasDAO();
         if (empty($mes_id)){
             $mes_id = date("m");
+            $_SESSION['mes_id'] = $mes_id;
         }
         if(empty($ano)){
             $ano = date("Y");
+            $_SESSION['ano'] = $ano;
         }
         return $dao->getAll($codigo_grupo_usuarios, $mes_id, $ano);
     }

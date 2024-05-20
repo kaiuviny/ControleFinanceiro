@@ -102,7 +102,8 @@ class Despesas_FixasController{
     public function listar(){
         $_SESSION["user"] = "kaiuviny";
         $_SESSION["cod_user"] = 1;
-        //echo "Codigo de usuario: " .$_GET["cod"] . "<br /><br />"; 
+        $_SESSION['mes_id'] = $_GET["mes"];
+        $_SESSION['ano'] = $_GET['ano'];
         $model = new Despesas_FixasModel();
         $_SESSION["data"] = $model->getAllModel($_SESSION["cod_user"], $_GET["mes"], $_GET['ano']);
         include("view/despesas/despesas_fixas.php");
