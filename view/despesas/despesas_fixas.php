@@ -75,6 +75,7 @@
                                             <a href="?Controller=Despesas_Fixas&Action=listar&mes=10"><button class="nav-link <?php echo $_SESSION['mes_id'] == 10 ? "active" : ""; ?>" id="nav-Outubro-tab"    data-bs-toggle="tab" data-bs-target="#nav-Outubro"      type="button" role="tab" aria-controls="nav-outubro"    aria-selected="false" onclick="carregar_tabela(1, 10);">   Outubro         </button></a>
                                             <a href="?Controller=Despesas_Fixas&Action=listar&mes=11"><button class="nav-link <?php echo $_SESSION['mes_id'] == 11 ? "active" : ""; ?>" id="nav-Novembro-tab"   data-bs-toggle="tab" data-bs-target="#nav-Novembro"     type="button" role="tab" aria-controls="nav-novembro"   aria-selected="false" onclick="carregar_tabela(1, 11);">   Novembro        </button></a>
                                             <a href="?Controller=Despesas_Fixas&Action=listar&mes=12"><button class="nav-link <?php echo $_SESSION['mes_id'] == 12 ? "active" : ""; ?>" id="nav-Dezembro-tab"   data-bs-toggle="tab" data-bs-target="#nav-Dezembro"     type="button" role="tab" aria-controls="nav-dezembro"   aria-selected="false" onclick="carregar_tabela(1, 12);">   Dezembro        </button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=novo"><button class="btn btn-primary" id="btnNovaDespesa">Nova Despesa</button></a>
                                         </div>
                                     </nav>
                                 </div>
@@ -138,7 +139,7 @@
                                         </div>
                                         <hr>
                                         <div class="card-body">
-                                                    <a href="?Controller=Despesas_Fixas&Action=novo"><button class="btn btn-primary" id="btnNovaDespesa">Nova Despesa</button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=novo"><button class="btn btn-primary" id="btnNovaDespesa">Nova Despesa</button></a>
                                         </div>
                                     </div>
 
