@@ -104,7 +104,16 @@ class DividasController{
     }
 
     public function deletar(){
+        $model = new DividasModel();
+        $vo = $model->getByIdModel($_GET['id_minha_dividas']);
 
+        if($model->deleteModel($vo)){
+            $_SESSION['msg'] = "Divida n.".$vo->getId_minha_dividas()." - (".$vo->getDescricao().") deletado com sucesso!";
+        }
+        else{
+            $_SESSION['msg'] = "Não foi possível deletar a Divida n.".$vo->getId_minha_dividas()." - (".$vo->getDescricao()."). Tente novamente!";
+        }
+        header("Location :?Controller=Dividas&Action=listar");
     }
 
     public function pesquisar(){
@@ -112,7 +121,9 @@ class DividasController{
     }
 
     public function listar(){
-
+        $model = new DividasModel();
+        $_SESSIOn['data'] = $model->getAllModel();
+        include ("view/dividas/dividas.php");
     }
 }
 ?>
