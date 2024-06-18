@@ -47,6 +47,36 @@ class DividasDAO implements iDividasDAO{
     }
 
     public function update(DividasVO $value){
+        $query = "UPDATE `dividas` SET cartoes_id = ?, descricao = ?, orgao_devedor = ?, valor_parcela = ?, valor_total = ?, numero_parcelas = ?, data_inicial = ?, dia_mes_vencimento = ?, multa_atraso = ?, juros_por_dia_atraso = ?, desconto_por_dia_adiantado = ?, user_update = ? WHERE id_minhas_dividas = ?;";
+
+        $cartoes_id = $value->getCartoes_id();
+        $descricao = $value->getDescricao();
+        $orgao_devedor = $value->getOrgao_devedor();
+        $valor_parcela = $value->getValor_parcela();
+        $valor_total = $value->getValor_parcela();
+        $numero_parcelas = $value->getNumero_parcelas();
+        $data_inicial = $value->getData_inicial();
+        $dia_mes_vencimento = $value->getDia_mes_vencimento();
+        $multa_atraso = $value->getMulta_atraso();
+        $juros_por_dia_atraso = $value->getJuros_por_dia_atraso();
+        $desconto_por_dia_adiantado = $value->getDesconto_por_dia_Adiantado();
+        $user_update = $value->getUser_update();
+        $id_minhas_dividas = $value->getId_minha_dividas();
+
+        $conn = new Connect();
+        $conn->getConnection();
+
+        $pstm = $conn->execSql($query);
+        $pstm->bind_param("issssissssssi", $cartoes_id, $descricao, $orgao_devedor, $valor_parcela, $valor_total, $numero_parcelas, $data_inicial, $dia_mes_vencimento, $multa_atraso, $juros_por_dia_atraso, $desconto_por_dia_adiantado, $user_update, $id_minhas_dividas);
+
+        if($pstm->execute()){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+
 
     }
 
