@@ -81,7 +81,22 @@ class DividasDAO implements iDividasDAO{
     }
 
     public function delete(DividasVO $value){
+        $query  = "DELETE FROM `dividas` WHERE `id_minhas_dividas` = ?";
 
+        $id_minhas_dividas = $value->getId_minha_dividas();
+
+        $conn = new Connect();
+        $conn->getConnection();
+
+        $pstm = $conn->execSql($query);
+        $pstm->bind_param("i", $id_minhas_dividas);
+
+        if($pstm->execute()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public function getById($id){
