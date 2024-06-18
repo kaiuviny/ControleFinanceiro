@@ -93,11 +93,10 @@ class Despesas_FixasController{
     }
 
     public function editar(){
-
-
     }
 
-    public function pesquisar(){}
+    public function pesquisar(){       
+    }
 
     public function listar(){
         $_SESSION["user"] = "kaiuviny";
