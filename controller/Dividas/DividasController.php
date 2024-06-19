@@ -117,12 +117,14 @@ class DividasController{
     }
 
     public function pesquisar(){
-        
+        $model = new DividasModel();
+        $_SESSION['data'] = $model->searchModel($_GET['word']);
+        include ("view/dividas/dividas.php");
     }
 
     public function listar(){
         $model = new DividasModel();
-        $_SESSIOn['data'] = $model->getAllModel();
+        $_SESSION['data'] = $model->getAllModel();
         include ("view/dividas/dividas.php");
     }
 }

@@ -18,8 +18,12 @@ class DividasModel{
 
     public function getByIdModel($id){
         $dao = new DividasDAO();
-        $divDAO = $dao->getById($id);
-        return $divDAO;
+        return $dao->getById($id);
+    }
+
+    public function searchModel($word){
+        $dao = new DividasDAO();
+        return $dao->search($word);
     }
 
     public function getAllModel(){

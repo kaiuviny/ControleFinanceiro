@@ -4,6 +4,7 @@ interface iDividasDAO{
     public function update(DividasVO $value);
     public function delete(DividasVO $value);
     public function getById($id);
+    public function search($word);
     public function getAll();
 }
 ?>
