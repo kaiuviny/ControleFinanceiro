@@ -12,19 +12,6 @@ class DividasController{
     public function salvar(){
         $model = new DividasModel();
         $vo = new DividasVO();
-        
-        /*echo "<br/><b>Cartao id:</b> " . $_POST['slcCartao'];
-        echo "<br/><b>Descricao:</b> " . $_POST['txtDescricao'];
-        echo "<br/><b>Orgao:</b> " . $_POST['txtOrgaoDevedor'];
-        echo "<br/><b>Parcela:</b> " . $_POST['txtValorParcela'];
-        echo "<br/><b>Total:</b> " . $_POST['txtValorTotal'];
-        echo "<br/><b>Numero de Parcelas:</b> " . $_POST['txtNumeroParcelas'];
-        echo "<br/><b>Data inicial:</b> " . $_POST['txtDataInicial'];
-        echo "<br/><b>Data Vencimento:</b> " . $_POST['txtDiaVencimento'];
-        echo "<br/><b>Multa Atraso:</b> " . $_POST['txtMultaAtraso'];
-        echo "<br/><b>Juros Diario:</b> " . $_POST['txtJurosDiario'];
-        echo "<br/><b>Desconto Diario:</b> " . $_POST['txtDescontoDiario'];
-        echo "<br/><b>Usuario:</b> " . $_SESSION['user'];*/
 
         $vo->setCartoes_id($_POST['slcCartao']);
         $vo->setDescricao($_POST['txtDescricao']);
@@ -117,12 +104,14 @@ class DividasController{
     }
 
     public function pesquisar(){
-        
+        $model = new DividasModel();
+        $_SESSION['data'] = $model->searchModel($_GET['word']);
+        include ("view/dividas/dividas.php");
     }
 
     public function listar(){
         $model = new DividasModel();
-        $_SESSIOn['data'] = $model->getAllModel();
+        $_SESSION['data'] = $model->getAllModel();
         include ("view/dividas/dividas.php");
     }
 }

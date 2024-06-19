@@ -76,8 +76,6 @@ class DividasDAO implements iDividasDAO{
             return false;
         }
 
-
-
     }
 
     public function delete(DividasVO $value){
@@ -128,9 +126,32 @@ class DividasDAO implements iDividasDAO{
         return $vo;
 
     }
+    public function search($word)
+    {
+        $query = "SELECT * FROM `dividas` WHERE `descricao` like '%?%';";
+        
+        $conn = new Connect();
+        $conn->getConnection();
+
+        $pstm = $conn->execReader($query);
+        $pstm->bind_param("s", $word);
+
+        $array = array();
+        while($rs = $pstm->fetch_array()){
+            $array[] = array($rs["id_minhas_dividas"], $rs["cartoes_id"], $rs["descricao"], $rs["orgao_devedor"], "R$ ".number_format($rs["valor_parcela"], 2, ',', '.'), "R$ ".number_format($rs["valor_total"], 2, ',', '.'), $rs["numero_parcelas"], $rs["data_inicial"], $rs["dia_mes_vencimento"], $rs["multa_atraso"]."%", $rs["juros_por_dia_atraso"]."%", $rs["desconto_por_dia_adiantado"]."%", $rs["user_update"], $rs["datetime_create"], $rs["last_update"]);
+        }
+        return $array;
+    }
 
     public function getAll(){
-
+        $conn = new Connect();
+        $conn->getConnection();
+        $query = $conn->execReader("SELECT * FROM `dividas`;");
+        $array = array();
+        while($rs = $query->fetch_array()){
+            $array[] = array($rs["id_minhas_dividas"], $rs["cartoes_id"], $rs["descricao"], $rs["orgao_devedor"], "R$ ".number_format($rs["valor_parcela"], 2, ',', '.'), "R$ ".number_format($rs["valor_total"], 2, ',', '.'), $rs["numero_parcelas"], $rs["data_inicial"], $rs["dia_mes_vencimento"], $rs["multa_atraso"]."%", $rs["juros_por_dia_atraso"]."%", $rs["desconto_por_dia_adiantado"]."%", $rs["user_update"], $rs["datetime_create"], $rs["last_update"]);
+        }
+        return $array;
     }
 }
 ?>
