@@ -8,19 +8,27 @@ $dayMoth = date("m");
 $link = mysqli_connect("127.0.0.1", "root", "", "ControleFinanceiro", "33306");
 //Cartoes de acordo com o grupo de usuario
 $queryCartoes = "SELECT 
-                        c.id_cartao, c.banco, p.primeiro_nome, p.sobre_nome
-                    FROM
-                        grupo_usuarios AS gu
-                            INNER JOIN
-                        usuarios AS u ON gu.usuario_id = u.id_usuario
-                            INNER JOIN
-                        pessoas AS p ON u.pessoa_id = p.id_pessoa
-                            INNER JOIN
-                        cartoes AS c ON p.id_pessoa = c.pessoa_id
-                    WHERE
-                        c.active = 'Y' AND u.active = 'Y'
-                            AND gu.codigo_grupo = " . $_SESSION["cod_user"];
+                    c.id_cartao AS `id`,
+                    concat(b.`id_banco`, \" \", CASE WHEN b.`nome_abreviado` IS NOT NULL THEN b.`nome_abreviado` ELSE \"\" END,\" (\", b.`razao_social`, \")\") AS `banco`, 
+                    concat (p.primeiro_nome, \" \", p.sobre_nome) AS `nome`
+                FROM
+                    grupo_usuarios AS gu
+                        INNER JOIN
+                    usuarios AS u ON gu.usuario_id = u.id_usuario
+                        INNER JOIN
+                    pessoas AS p ON u.pessoa_id = p.id_pessoa
+                        INNER JOIN
+                    cartoes AS c ON p.id_pessoa = c.pessoa_id
+                    INNER JOIN
+                    bancos AS b ON c.banco_id = b.id_banco
+                WHERE
+                    c.active = 'Y' AND u.active = 'Y'
+                        AND gu.codigo_grupo = " . $_SESSION["cod_user"];
 $resultCartoes = mysqli_query($link, $queryCartoes);
+
+
+$queryDividas = "SELECT * FROM tipo_dividas;";
+$resultTipoDividas = mysqli_query($link, $queryDividas);
 
 
 ?>
@@ -35,7 +43,7 @@ $resultCartoes = mysqli_query($link, $queryCartoes);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Cadastro de Despesas Variaveis</title>
+    <title>Cadastro de Dividas</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- Custom fonts for this template-->
@@ -86,52 +94,74 @@ $resultCartoes = mysqli_query($link, $queryCartoes);
                                             <div class="card-body">
                                                 <form  name="frmLogin" id="frmLogin" method="post" action="?Controller=Dividas&Action=salvar">
                                                     <aside class="row">
-                                                        <div class="offset-md-2 col-md-3">
-                                                            <label class="label form-label" for="slcCartao" id="lblCartao">Cartão:</label>
-                                                            <select class="form-control" id="slcCartao" name="slcCartao">
-                                                                <option value="">--Selecione um catão--</option>
+                                                        <div class="offset-md-2 col-md-4">
+                                                            <label class="label form-label" for="slcTipoDivida" id="lblTipoDivida">(*)Tipo de Divida:</label>
+                                                            <select class="form-control" id="slcTipoDivida" name="slcTipoDivida" required>
+                                                                <option value="">--Selecione uma divida--</option>
                                                                 <?php
-                                                                while($rsCartoes = mysqli_fetch_object($resultCartoes)){
-                                                                    echo"<option value='".$rsCartoes->id_cartao."'>" . $rsCartoes->banco . " (" . $rsCartoes->primeiro_nome . " " . $rsCartoes->sobre_nome . ")</option>";
+                                                                while($rsTipoDividas = mysqli_fetch_object($resultTipoDividas)){
+                                                                    echo"<option value='".$rsTipoDividas->id_tipo_divida."'>" . $rsTipoDividas->id_tipo_divida . "-" . $rsTipoDividas->tipo . "</option>";
                                                                 }
                                                                 ?>
                                                             </select>
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-4">
+                                                            <label class="label form-label" for="slcCartao" id="lblCartao">Cartão:</label>
+                                                            <select class="form-control" id="slcCartao" name="slcCartao">
+                                                                <option value="0">Sem Cartão</option>
+                                                                <?php
+                                                                while($rsCartoes = mysqli_fetch_object($resultCartoes)){
+                                                                    echo"<option value='".$rsCartoes->id_cartao."'>" . $rsCartoes->banco . " - " . $rsCartoes->nome."</option>";
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </div>
+                                                    </aside>
+                                                    <aside class="row"><div class="offset-md-2 col-md-8"><hr /></div></aside>
+                                                    <br />
+                                                    <aside class="row">            
+                                                        <div class="offset-md-2 col-md-4">
                                                             <label class="label form-label" for="txtDescricao" id="lblDescricao">(*)Descrição:</label>
                                                             <input class="form-control" id="txtDescricao" name="txtDescricao" maxlength="255" required >
                                                         </div>
-                                                        <div class="col-md-2">
+                                                        <div class="col-md-4">
                                                             <label class="label form-label" for="txtOrgaoDevedor" id="lblOrgaoDevedor">(*)Orgão Devedor:</label>
                                                             <input class="form-control" id="txtOrgaoDevedor" name="txtOrgaoDevedor" maxlength="45"  required />
                                                         </div>
                                                     </aside>
+                                                    <aside class="row"><div class="offset-md-2 col-md-8"><hr /></div></aside>
                                                     <br />
                                                     <aside class="row"> 
                                                         <div class="offset-md-2 col-md-2">
-                                                            <label class="label form-label" for="txtNumeroParcelas" id="lblNumeroParcelas">(*)Número de Parcelas:</label>
-                                                            <input class="form-control" id="txtNumeroParcelas" name="txtNumeroParcelas" type="number" min="1" max="999" value="1" required/>
-                                                        </div>
-                                                        <div class="col-md-2">
                                                             <label class="label form-label" for="txtValorParcela" id="lblvalorParcela">(*)Valor das Parcelas:</label>
-                                                            <input class="form-control" id="txtValorParcela" name="txtValorParcela" type="number" min="1" max="99999" step="any" value="100.00" required />
+                                                            <input class="form-control" id="txtValorParcela" name="txtValorParcela" type="number" min="1" max="999999" step="any" value="100.00" onchange="calcula_valor_total(this.value, $('#txtNumeroParcelas').val());" required />
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            <label class="label form-label" for="txtNumeroParcelas" id="lblNumeroParcelas">(*)Qtde Parcelas:</label>
+                                                            <input class="form-control" id="txtNumeroParcelas" name="txtNumeroParcelas" type="number" min="1" max="999" value="1" onchange="calcula_valor_total($('#txtValorParcela').val(), this.value);" required/>
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label class="label form-label" for="txtValorTotal" id="lblvalorTotal">(*)Valor Total Devido:</label>
-                                                            <input class="form-control" id="txtValorTotal" name="txtValorTotal" type="number" min="1" max="99999" step="any" value="100.00" required />
+                                                            <input class="form-control" id="txtValorTotal" name="txtValorTotal" type="number" min="1" max="999999" step="any" value="100.00" required />
                                                         </div>
                                                         <div class="col-md-2">
                                                             <label class="label form-label" for="txtDataInicial" id="lblDataInicial">(*)Data Incial:</label>
                                                             <input class="form-control" id="txtDataInicial" name="txtDataInicial" type="date" value="<?=date('Y-m-d')?>" required/>    
                                                         </div> 
-                                                    </aside>
-                                                    <br /> 
-                                                    <aside class="row">
-                                                        <div class="offset-md-2 col-md-2">
-                                                            <label class="label form-label" for="txtDiaVencimento" id="lblDiaVencimento">(*)Dia Vencimento:</label>
+                                                        <div class="col-md-1">
+                                                            <label class="label form-label" for="txtDiaVencimento" id="lblDiaVencimento">(*)Dia Vencto:</label>
                                                             <input class="form-control" id="txtDiaVencimento" name="txtDiaVencimento" type="number" min="1" max="31" value="1" required/>
                                                         </div>
-                                                        <div class="col-md-2">
+                                                    </aside>
+                                                    <aside class="row"><div class="offset-md-2 col-md-8"><hr /></div></aside>
+                                                    <br /> 
+                                                    <aside class="row">
+                                                        <div class="offset-md-2 col-md-8">
+                                                            <h6><b><i><u>Campos Opcionais</u></i></b></h6>
+                                                        </div>
+                                                    </aside>
+                                                    <aside class="row">
+                                                        <div class="offset-md-2 col-md-3">
                                                             <label class="label form-label" for="txtMultaAtraso" id="lblMultaAtraso">% Multa Atraso:</label>
                                                             <input class="form-control" id="txtMultaAtraso" name="txtMultaAtraso" type="number" min="1" max="99" step="any" value="8.90"  />
                                                         </div>
@@ -139,11 +169,12 @@ $resultCartoes = mysqli_query($link, $queryCartoes);
                                                             <label class="label form-label" for="txtJurosDiario" id="lblJurosDiario">% Juros Diarios:</label>
                                                             <input class="form-control" id="txtJurosDiario" name="txtJurosDiario" type="number" min="1" max="99" step="any" value="1.10"  />
                                                         </div>
-                                                        <div class="col-md-2">
-                                                            <label class="label form-label" for="txtDescontoDiario" id="lblJurosDiario">% Desconto diário:</label>
+                                                        <div class="col-md-3">
+                                                            <label class="label form-label" for="txtDescontoDiario" id="lblJurosDiario">% Desconto  Adiantamento diário:</label>
                                                             <input class="form-control" id="txtDescontoDiario" name="txtDescontoDiario" type="number" min="0" max="99" step="any" value="0.20"  />
                                                         </div>     
                                                     </aside>
+                                                    <aside class="row"><div class="offset-md-2 col-md-8"><hr /></div></aside>
                                                     <br />
                                                     <aside class="row">
                                                         <div class="offset-md-5 col-md-5 ">
@@ -164,41 +195,59 @@ $resultCartoes = mysqli_query($link, $queryCartoes);
                             <!-- Brand Buttons -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Despesas Variáveis Cadastradas</h6>
+                                    <h2 class="m-0 font-weight-bold text-primary">Ultimas dividas Cadastradas</h2>
                                 </div>
                                 <div class="card-body">
+                                    <a href="?Controller=Dividas&Action=listar"><button class="btn btn-primary" id="btnListarDespesaUp">Listar Todas Dívidas</button></a>
+                                    <hr />
                                     <div class="table-responsive">
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
                                                 <th>Selecionar</th>
-                                                <th>Descrição</th>
-                                                <th>Categoria</th>
-                                                <th>Vencimento</th>
-                                                <th>Valor</th>
-                                                <th>Status</th>
-                                                <th>Usuario</th>
-                                                <th>Última Atualização</th>
+                                                <th>Tipo da Dívida</th>
+                                                <th>Cartão</th>
+                                                <th>Descrição da Dívida</th>
+                                                <th>Orgão devedor</th>
+                                                <th>Valor da Parcela</th>
+                                                <th>Número de Parcelas</th>
+                                                <th>Valor Total</th>
+                                                <th>Data Inicial</th>
+                                                <th>Dia do Vencimento</th>
+                                                <th>Multa de Atraso</th>
+                                                <th>Juros p/ Dia</th>
+                                                <th>Desconto p/ Dia (pgto adiantado)</th>
+                                                <th>Data Criação</th>
+                                                <th>Usuário</th>
+                                                <th>Ultima Atualização</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
-                                            <tr>
+                                        <tr>
                                                 <th>Selecionar</th>
-                                                <th>Descrição</th>
-                                                <th>Categoria</th>
-                                                <th>Vencimento</th>
-                                                <th>Valor</th>
-                                                <th>Status</th>
-                                                <th>Usuario</th>
-                                                <th>Última Atualização</th>
+                                                <th>Tipo da Dívida</th>
+                                                <th>Cartão</th>
+                                                <th>Descrição da Dívida</th>
+                                                <th>Orgão devedor</th>
+                                                <th>Valor da Parcela</th>
+                                                <th>Número de Parcelas</th>
+                                                <th>Valor Total</th>
+                                                <th>Data Inicial</th>
+                                                <th>Dia do Vencimento</th>
+                                                <th>Multa de Atraso</th>
+                                                <th>Juros p/ Dia</th>
+                                                <th>Desconto p/ Dia (pgto adiantado)</th>
+                                                <th>Data Criação</th>
+                                                <th>Usuário</th>
+                                                <th>Ultima Atualização</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
                                         <?php
-                                            //$return = $_SESSION["data"];
-                                           // foreach($return as $value){
+                                            $return = $_SESSION["data_ultimas_dividas"];
+                                           foreach($return as $value){
                                             ?>
-                                            <!--<tr>
+                                            <tr>
                                                 <td><input class='btn-check' autocomplete='off' type='checkbox' id='chbDespesasFixas<?=$value[0]?>' value='<?=$value[0]?>' /><label class='btn btn-outline-primary' for='chbDespesasFixas<?=$value[0]?>'><?=$value[0]?></label></td>
                                                 <td><?=$value[1]?></td>
                                                 <td><?=$value[2]?></td>
@@ -207,13 +256,23 @@ $resultCartoes = mysqli_query($link, $queryCartoes);
                                                 <td><?=$value[5]?></td>
                                                 <td><?=$value[6]?></td>
                                                 <td><?=$value[7]?></td>
-                                            </tr>-->
+                                                <td><?=$value[8]?></td>
+                                                <td><?=$value[9]?></td>
+                                                <td><?=$value[10]?></td>
+                                                <td><?=$value[11]?></td>
+                                                <td><?=$value[12]?></td>
+                                                <td><?=$value[13]?></td>
+                                                <td><?=$value[14]?></td>
+                                                <td><?=$value[15]?></td>
+                                            </tr>
                                             <?php
-                                            //}
+                                            }
                                             ?>
                                         </tbody>
                                         </table>
                                     </div>
+                                    <hr />
+                                    <a href="?Controller=Dividas&Action=listar"><button class="btn btn-primary" id="btnListarDespesaDown">Listar Todas Dívidas</button></a>
                                 </div>
                             </div>
                         </div>
@@ -298,6 +357,15 @@ $resultCartoes = mysqli_query($link, $queryCartoes);
                 tabTrigger.show()
             })
         })
+    </script>
+
+    <script>
+
+        function calcula_valor_total(txtValorParcela, txtNumeroParcelas){
+            let valor_total = (txtValorParcela * txtNumeroParcelas)
+            $("#txtValorTotal").val(valor_total)
+        }
+
     </script>
 
 </body>

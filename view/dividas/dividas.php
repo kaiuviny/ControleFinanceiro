@@ -1,41 +1,14 @@
-<?php
-//session_start();
-$_SESSION["cod_user"] = 1;
-$_SESSION["user"] = "kaiuviny";
-// dia do mes
-$dayMoth = date("m");
-//conexao
-$link = mysqli_connect("127.0.0.1", "root", "", "ControleFinanceiro", "33306");
-//Cartoes de acordo com o grupo de usuario
-$queryCartoes = "SELECT 
-                        c.id_cartao, c.banco, p.primeiro_nome, p.sobre_nome
-                    FROM
-                        grupo_usuarios AS gu
-                            INNER JOIN
-                        usuarios AS u ON gu.usuario_id = u.id_usuario
-                            INNER JOIN
-                        pessoas AS p ON u.pessoa_id = p.id_pessoa
-                            INNER JOIN
-                        cartoes AS c ON p.id_pessoa = c.pessoa_id
-                    WHERE
-                        c.active = 'Y' AND u.active = 'Y'
-                            AND gu.codigo_grupo = " . $_SESSION["cod_user"];
-$resultCartoes = mysqli_query($link, $queryCartoes);
-
-
-?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Cadastro de Despesas Variaveis</title>
+    <title>Listagem de Dividas</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- Custom fonts for this template-->
@@ -71,134 +44,103 @@ $resultCartoes = mysqli_query($link, $queryCartoes);
 
                         <div class="col-lg-12">
 
-                            <!-- Circle Buttons -->
+                            <!-- Page Content -->
                             <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">REGISTRAR MINHAS DIVIDAS</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="tab-content" id="nav-tabContent">
-                                        <!-- DataTales Example -->
-                                        <div class="card shadow mb-4">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Preencha todos os campos (*) do formulário</h6>
-                                            </div>
-                                            <div class="card-body">
-                                                <form  name="frmLogin" id="frmLogin" method="post" action="?Controller=Dividas&Action=salvar">
-                                                    <aside class="row">
-                                                        <div class="offset-md-2 col-md-3">
-                                                            <label class="label form-label" for="slcCartao" id="lblCartao">Cartão:</label>
-                                                            <select class="form-control" id="slcCartao" name="slcCartao">
-                                                                <option value="">--Selecione um catão--</option>
-                                                                <?php
-                                                                while($rsCartoes = mysqli_fetch_object($resultCartoes)){
-                                                                    echo"<option value='".$rsCartoes->id_cartao."'>" . $rsCartoes->banco . " (" . $rsCartoes->primeiro_nome . " " . $rsCartoes->sobre_nome . ")</option>";
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <label class="label form-label" for="txtDescricao" id="lblDescricao">(*)Descrição:</label>
-                                                            <input class="form-control" id="txtDescricao" name="txtDescricao" maxlength="255" required >
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <label class="label form-label" for="txtOrgaoDevedor" id="lblOrgaoDevedor">(*)Orgão Devedor:</label>
-                                                            <input class="form-control" id="txtOrgaoDevedor" name="txtOrgaoDevedor" maxlength="45"  required />
-                                                        </div>
-                                                    </aside>
-                                                    <br />
-                                                    <aside class="row"> 
-                                                        <div class="offset-md-2 col-md-2">
-                                                            <label class="label form-label" for="txtNumeroParcelas" id="lblNumeroParcelas">(*)Número de Parcelas:</label>
-                                                            <input class="form-control" id="txtNumeroParcelas" name="txtNumeroParcelas" type="number" min="1" max="999" value="1" required/>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <label class="label form-label" for="txtValorParcela" id="lblvalorParcela">(*)Valor das Parcelas:</label>
-                                                            <input class="form-control" id="txtValorParcela" name="txtValorParcela" type="number" min="1" max="99999" step="any" value="100.00" required />
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <label class="label form-label" for="txtValorTotal" id="lblvalorTotal">(*)Valor Total Devido:</label>
-                                                            <input class="form-control" id="txtValorTotal" name="txtValorTotal" type="number" min="1" max="99999" step="any" value="100.00" required />
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <label class="label form-label" for="txtDataInicial" id="lblDataInicial">(*)Data Incial:</label>
-                                                            <input class="form-control" id="txtDataInicial" name="txtDataInicial" type="date" value="<?=date('Y-m-d')?>" required/>    
-                                                        </div> 
-                                                    </aside>
-                                                    <br /> 
-                                                    <aside class="row">
-                                                        <div class="offset-md-2 col-md-2">
-                                                            <label class="label form-label" for="txtDiaVencimento" id="lblDiaVencimento">(*)Dia Vencimento:</label>
-                                                            <input class="form-control" id="txtDiaVencimento" name="txtDiaVencimento" type="number" min="1" max="31" value="1" required/>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <label class="label form-label" for="txtMultaAtraso" id="lblMultaAtraso">% Multa Atraso:</label>
-                                                            <input class="form-control" id="txtMultaAtraso" name="txtMultaAtraso" type="number" min="1" max="99" step="any" value="8.90"  />
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <label class="label form-label" for="txtJurosDiario" id="lblJurosDiario">% Juros Diarios:</label>
-                                                            <input class="form-control" id="txtJurosDiario" name="txtJurosDiario" type="number" min="1" max="99" step="any" value="1.10"  />
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <label class="label form-label" for="txtDescontoDiario" id="lblJurosDiario">% Desconto diário:</label>
-                                                            <input class="form-control" id="txtDescontoDiario" name="txtDescontoDiario" type="number" min="0" max="99" step="any" value="0.20"  />
-                                                        </div>     
-                                                    </aside>
-                                                    <br />
-                                                    <aside class="row">
-                                                        <div class="offset-md-5 col-md-5 ">
-                                                            <input type="submit" id="btnRegistrar" name="btnRegistrar" value="REGISTAR" class="btn btn-success" class="form form-control" style="padding: 10px 55px 10px 55px; font-size:18px;"/>
-                                                        </div>
-                                                    </aside>   
-                                                        
-                                                        
-                                                       
-                                                </form>
-                                                <br />
-                                            </div>
-                                        </div>
-                                    </div>                                   
-                                </div>
-                            </div>
 
-                            <!-- Brand Buttons -->
-                            <div class="card shadow mb-4">
+                                <!-- Page Heading -->
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Despesas Variáveis Cadastradas</h6>
+                                    <h2 class="m-0 font-weight-bold text-primary">Dívidas Cadastradas</h2>
                                 </div>
+
+                                <div class="card_header py-3">
+                                    
+                                    <h6 class="m-0 font-weight-bold text-primary">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;Selecione o ano:
+                                        <select class="btn-primary" onchange="selectYear('Dividas', 'listar', <?=$_SESSION['mes_id']?>, this.value);">
+                                            <option value="<?=$_SESSION['ano']?>"><?=$_SESSION['ano']?></option>
+                                            <?php
+                                            for($i=2020;$i<=2030;$i++){
+                                                echo"<option value='$i'>$i</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </h6>
+
+                                    <nav>
+                                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                            <a href="?Controller=Dividas&Action=listar&mes=1&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 1  ? "active" : ""; ?>" id="nav-Janeiro-tab"     data-bs-toogle="tab" data-bs-target="#nav-Janeiro"      type="button" role="tab" aria-controls="nav-Janeiro"    aria-selected="false" onclick="carregar_tabela(1, 1);" >    Janeiro     </button></a>
+                                            <a href="?Controller=Dividas&Action=listar&mes=2&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 2  ? "active" : ""; ?>" id="nav-Feveiro-tab"     data-bs-toogle="tab" data-bs-target="#nav-Fevereiro"    type="button" role="tab" aria-controls="nav-Feveiro"    aria-selected="false" onclick="carregar_tabela(1, 2);" >    Fevereiro   </button></a>
+                                            <a href="?Controller=Dividas&Action=listar&mes=3&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 3  ? "active" : ""; ?>" id="nav-Marco-tab"       data-bs-toogle="tab" data-bs-target="#nav-Marco"        type="button" role="tab" aria-controls="nav-Marco"      aria-selected="false" onclick="carregar_tabela(1, 3);" >    Março       </button></a>
+                                            <a href="?Controller=Dividas&Action=listar&mes=4&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 4  ? "active" : ""; ?>" id="nav-Abril-tab"       data-bs-toogle="tab" data-bs-target="#nav-Abril"        type="button" role="tab" aria-controls="nav-Abril"      aria-selected="false" onclick="carregar_tabela(1, 4);" >    Abril       </button></a>
+                                            <a href="?Controller=Dividas&Action=listar&mes=5&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 5  ? "active" : ""; ?>" id="nav-Maio-tab"        data-bs-toogle="tab" data-bs-target="#nav-Maio"         type="button" role="tab" aria-controls="nav-Maio"       aria-selected="false" onclick="carregar_tabela(1, 5);" >    Maio        </button></a>
+                                            <a href="?Controller=Dividas&Action=listar&mes=6&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 6  ? "active" : ""; ?>" id="nav-Junho-tab"       data-bs-toogle="tab" data-bs-target="#nav-Junho"        type="button" role="tab" aria-controls="nav-Junho"      aria-selected="false" onclick="carregar_tabela(1, 6);" >    Junho       </button></a>
+                                            <a href="?Controller=Dividas&Action=listar&mes=7&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 7  ? "active" : ""; ?>" id="nav-Julho-tab"       data-bs-toogle="tab" data-bs-target="#nav-Julho"        type="button" role="tab" aria-controls="nav-Julho"      aria-selected="false" onclick="carregar_tabela(1, 7);" >    Julho       </button></a>
+                                            <a href="?Controller=Dividas&Action=listar&mes=8&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 8  ? "active" : ""; ?>" id="nav-Agosto-tab"      data-bs-toogle="tab" data-bs-target="#nav-Agosto"       type="button" role="tab" aria-controls="nav-Agosto"     aria-selected="false" onclick="carregar_tabela(1, 8);" >    Agosto      </button></a>
+                                            <a href="?Controller=Dividas&Action=listar&mes=9&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 9  ? "active" : ""; ?>" id="nav-Setembro-tab"    data-bs-toogle="tab" data-bs-target="#nav-Setembro"     type="button" role="tab" aria-controls="nav-Setembro"   aria-selected="false" onclick="carregar_tabela(1, 9);" >    Setembro    </button></a>
+                                            <a href="?Controller=Dividas&Action=listar&mes=10&ano=<?=$_SESSION['ano']?>"><button class="nav-link <?php echo $_SESSION['mes_id'] == 10 ? "active" : ""; ?>" id="nav-Outubro-tab"     data-bs-toogle="tab" data-bs-target="#nav-Outubro"      type="button" role="tab" aria-controls="nav-Outubro"    aria-selected="false" onclick="carregar_tabela(1, 10);" >   Outubro     </button></a>
+                                            <a href="?Controller=Dividas&Action=listar&mes=11&ano=<?=$_SESSION['ano']?>"><button class="nav-link <?php echo $_SESSION['mes_id'] == 11 ? "active" : ""; ?>" id="nav-Novembro-tab"    data-bs-toogle="tab" data-bs-target="#nav-Novembro"     type="button" role="tab" aria-controls="nav-Novembro"   aria-selected="false" onclick="carregar_tabela(1, 11);" >   Novembro    </button></a>
+                                            <a href="?Controller=Dividas&Action=listar&mes=12&ano=<?=$_SESSION['ano']?>"><button class="nav-link <?php echo $_SESSION['mes_id'] == 12 ? "active" : ""; ?>" id="nav-Dezembro-tab"    data-bs-toogle="tab" data-bs-target="#nav-Dezembro"     type="button" role="tab" aria-controls="nav-Dezembro"   aria-selected="false" onclick="carregar_tabela(1, 12);" >   Dezembro    </button></a>
+                                        </div>
+                                    </nav>
+
+                                </div>
+                                
+                                <!-- Begin Page Content -->
                                 <div class="card-body">
+                                    <a href="?Controller=Dividas&Action=novo"><button class="btn btn-primary" id="btnNovaDespesa">Cadastrar Nova Divida</button></a>
+                                    <hr />
                                     <div class="table-responsive">
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                             <tr>
                                                 <th>Selecionar</th>
-                                                <th>Descrição</th>
-                                                <th>Categoria</th>
-                                                <th>Vencimento</th>
-                                                <th>Valor</th>
+                                                <th>Tipo da Dívida</th>
+                                                <th>Cartão</th>
+                                                <th>Descrição da Dívida</th>
+                                                <th>Orgão devedor</th>
+                                                <th>Site do Orgão</th>
+                                                <th>Valor da Parcela</th>
+                                                <th>Número de Parcelas</th>
+                                                <th>Valor Total</th>
+                                                <th>Data Inicial</th>
+                                                <th>Dia do Vencimento</th>
+                                                <th>Multa de Atraso</th>
+                                                <th>Juros p/ Dia</th>
+                                                <th>Desconto p/ Dia (pgto adiantado)</th>
+                                                <th>Data Criação</th>
+                                                <th>Usuário</th>
+                                                <th>Ultima Atualização</th>
                                                 <th>Status</th>
-                                                <th>Usuario</th>
-                                                <th>Última Atualização</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
                                                 <th>Selecionar</th>
-                                                <th>Descrição</th>
-                                                <th>Categoria</th>
-                                                <th>Vencimento</th>
-                                                <th>Valor</th>
+                                                <th>Tipo da Dívida</th>
+                                                <th>Cartão</th>
+                                                <th>Descrição da Dívida</th>
+                                                <th>Orgão devedor</th>
+                                                <th>Site do Orgão</th>
+                                                <th>Valor da Parcela</th>
+                                                <th>Número de Parcelas</th>
+                                                <th>Valor Total</th>
+                                                <th>Data Inicial</th>
+                                                <th>Dia do Vencimento</th>
+                                                <th>Multa de Atraso</th>
+                                                <th>Juros p/ Dia</th>
+                                                <th>Desconto p/ Dia (pgto adiantado)</th>
+                                                <th>Data Criação</th>
+                                                <th>Usuário</th>
+                                                <th>Ultima Atualização</th>
                                                 <th>Status</th>
-                                                <th>Usuario</th>
-                                                <th>Última Atualização</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
                                         <?php
-                                            //$return = $_SESSION["data"];
-                                           // foreach($return as $value){
+                                            $return = $_SESSION["data_dividas"];
+                                            foreach($return as $value){
                                             ?>
-                                            <!--<tr>
+                                            <tr>
                                                 <td><input class='btn-check' autocomplete='off' type='checkbox' id='chbDespesasFixas<?=$value[0]?>' value='<?=$value[0]?>' /><label class='btn btn-outline-primary' for='chbDespesasFixas<?=$value[0]?>'><?=$value[0]?></label></td>
                                                 <td><?=$value[1]?></td>
                                                 <td><?=$value[2]?></td>
@@ -207,12 +149,24 @@ $resultCartoes = mysqli_query($link, $queryCartoes);
                                                 <td><?=$value[5]?></td>
                                                 <td><?=$value[6]?></td>
                                                 <td><?=$value[7]?></td>
-                                            </tr>-->
+                                                <td><?=$value[8]?></td>
+                                                <td><?=$value[9]?></td>
+                                                <td><?=$value[10]?></td>
+                                                <td><?=$value[11]?></td>
+                                                <td><?=$value[12]?></td>
+                                                <td><?=$value[13]?></td>
+                                                <td><?=$value[14]?></td>
+                                                <td><?=$value[15]?></td>
+                                                <td><?=$value[16]?></td>
+                                                <td><?=$value[17]?></td>
+                                            </tr>
                                             <?php
-                                            //}
+                                            }
                                             ?>
                                         </tbody>
                                         </table>
+                                        <hr />
+                                        <a href="?Controller=Dividas&Action=novo"><button class="btn btn-primary" id="btnNovaDespesa">Cadastrar Nova Divida</button></a>
                                     </div>
                                 </div>
                             </div>
@@ -266,8 +220,8 @@ $resultCartoes = mysqli_query($link, $queryCartoes);
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
+     <!-- Bootstrap core JavaScript-->
+     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
@@ -277,8 +231,8 @@ $resultCartoes = mysqli_query($link, $queryCartoes);
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
 
-     <!-- Page level plugins -->
-     <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
@@ -286,20 +240,19 @@ $resultCartoes = mysqli_query($link, $queryCartoes);
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>                                                            
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>   
 
     <script>
-        var triggerTabList = [].slice.call(document.querySelectorAll('#nav-tab'))
-            triggerTabList.forEach(function (triggerEl) {
-            var tabTrigger = new bootstrap.Tab(triggerEl)
-
-            triggerEl.addEventListener('click', function (event) {
-                event.preventDefault()
-                tabTrigger.show()
-            })
-        })
+        function selectYear(controller, action, month, year){
+            
+            let prt = window.location.protocol
+            let hst = window.location.host
+            let pth = window.location.pathname
+            let act = "?Controller="+controller+"&Action="+action+"&mes="+month+"&ano="+year
+            let nUrl = (prt + "//" + hst + pth + act)
+            window.location.href = nUrl
+        }
     </script>
-
 </body>
 
 </html>

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,8 +22,6 @@
 
     <!-- Custom styles for this page -->
     <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    
-
 </head>
 
 <body id="page-top">
@@ -42,16 +39,22 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Minhas Despesas Fixas</h1>
-
                     <div class="row">
+
                         <div class="col-lg-12">
-                            <!-- Circle Buttons -->
+
+                            <!-- Page Content -->
                             <div class="card shadow mb-4">
+
+                                <!-- Page Heading -->
                                 <div class="card-header py-3">
+                                    <h2 class="m-0 font-weight-bold text-primary">Minhas Despesas Fixas</h2>
+                                </div>
+
+                                <div class="card-header py-3">
+                                    
                                     <h6 class="m-0 font-weight-bold text-primary">
-                                        Selecione o Mês de 
+                                        &nbsp;&nbsp;&nbsp;&nbsp;Selecione o ano: 
                                         <select class="btn-primary" onchange="selectYear('Despesas_Fixas', 'listar', <?=$_SESSION['mes_id']?>, this.value);">
                                             <option value="<?=$_SESSION['ano']?>"><?=$_SESSION['ano']?></option>
                                             <?php
@@ -61,110 +64,78 @@
                                             ?>
                                         </select>
                                     </h6>
+
                                     <nav>
                                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=1"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 1  ? "active" : ""; ?>" id="nav-Janeiro-tab"    data-bs-toggle="tab" data-bs-target="#nav-Janeiro"      type="button" role="tab" aria-controls="nav-Janeiro"    aria-selected="false" onclick="carregar_tabela(1, 1);">    Janeiros        </button></a>
-                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=2"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 2  ? "active" : ""; ?>" id="nav-Fevereiro-tab"  data-bs-toggle="tab" data-bs-target="#nav-Fevereiro"    type="button" role="tab" aria-controls="nav-Fevereiro"  aria-selected="false" onclick="carregar_tabela(1, 2);">    Fevereiro       </button></a>
-                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=3"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 3  ? "active" : ""; ?>" id="nav-Marco-tab"      data-bs-toggle="tab" data-bs-target="#nav-Marco"        type="button" role="tab" aria-controls="nav-Marco"      aria-selected="false" onclick="carregar_tabela(1, 3);">    Março           </button></a>
-                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=4"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 4  ? "active" : ""; ?>" id="nav-Abril-tab"      data-bs-toggle="tab" data-bs-target="#nav-Abril"        type="button" role="tab" aria-controls="nav-abril"      aria-selected="false" onclick="carregar_tabela(1, 4);">    Abril           </button></a>
-                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=5"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 5  ? "active" : ""; ?>" id="nav-Maio-tab"       data-bs-toggle="tab" data-bs-target="#nav-Maio"         type="button" role="tab" aria-controls="nav-maio"       aria-selected="true"  onclick="carregar_tabela(1, 5);">    Maio            </button></a>
-                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=6"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 6  ? "active" : ""; ?>" id="nav-Junho-tab"      data-bs-toggle="tab" data-bs-target="#nav-Junho"        type="button" role="tab" aria-controls="nav-junho"      aria-selected="false" onclick="carregar_tabela(1, 6);">    Junho           </button></a>
-                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=7"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 7  ? "active" : ""; ?>" id="nav-Julho-tab"      data-bs-toggle="tab" data-bs-target="#nav-Julho"        type="button" role="tab" aria-controls="nav-julho"      aria-selected="false" onclick="carregar_tabela(1, 7);">    Julho           </button></a>
-                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=8"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 8  ? "active" : ""; ?>" id="nav-Agosto-tab"     data-bs-toggle="tab" data-bs-target="#nav-Agosto"       type="button" role="tab" aria-controls="nav-agosto"     aria-selected="false" onclick="carregar_tabela(1, 8);">    Agosto          </button></a>
-                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=9"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 9  ? "active" : ""; ?>" id="nav-Setembro-tab"   data-bs-toggle="tab" data-bs-target="#nav-Setembro"     type="button" role="tab" aria-controls="nav-setembro"   aria-selected="false" onclick="carregar_tabela(1, 9);">    Setembro        </button></a>
-                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=10"><button class="nav-link <?php echo $_SESSION['mes_id'] == 10 ? "active" : ""; ?>" id="nav-Outubro-tab"    data-bs-toggle="tab" data-bs-target="#nav-Outubro"      type="button" role="tab" aria-controls="nav-outubro"    aria-selected="false" onclick="carregar_tabela(1, 10);">   Outubro         </button></a>
-                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=11"><button class="nav-link <?php echo $_SESSION['mes_id'] == 11 ? "active" : ""; ?>" id="nav-Novembro-tab"   data-bs-toggle="tab" data-bs-target="#nav-Novembro"     type="button" role="tab" aria-controls="nav-novembro"   aria-selected="false" onclick="carregar_tabela(1, 11);">   Novembro        </button></a>
-                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=12"><button class="nav-link <?php echo $_SESSION['mes_id'] == 12 ? "active" : ""; ?>" id="nav-Dezembro-tab"   data-bs-toggle="tab" data-bs-target="#nav-Dezembro"     type="button" role="tab" aria-controls="nav-dezembro"   aria-selected="false" onclick="carregar_tabela(1, 12);">   Dezembro        </button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=1&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 1  ? "active" : ""; ?>" id="nav-Janeiro-tab"    data-bs-toggle="tab" data-bs-target="#nav-Janeiro"      type="button" role="tab" aria-controls="nav-Janeiro"    aria-selected="false" onclick="carregar_tabela(1, 1);">    Janeiro        </button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=2&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 2  ? "active" : ""; ?>" id="nav-Fevereiro-tab"  data-bs-toggle="tab" data-bs-target="#nav-Fevereiro"    type="button" role="tab" aria-controls="nav-Fevereiro"  aria-selected="false" onclick="carregar_tabela(1, 2);">    Fevereiro       </button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=3&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 3  ? "active" : ""; ?>" id="nav-Marco-tab"      data-bs-toggle="tab" data-bs-target="#nav-Marco"        type="button" role="tab" aria-controls="nav-Marco"      aria-selected="false" onclick="carregar_tabela(1, 3);">    Março           </button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=4&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 4  ? "active" : ""; ?>" id="nav-Abril-tab"      data-bs-toggle="tab" data-bs-target="#nav-Abril"        type="button" role="tab" aria-controls="nav-Abril"      aria-selected="false" onclick="carregar_tabela(1, 4);">    Abril           </button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=5&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 5  ? "active" : ""; ?>" id="nav-Maio-tab"       data-bs-toggle="tab" data-bs-target="#nav-Maio"         type="button" role="tab" aria-controls="nav-Maio"       aria-selected="true"  onclick="carregar_tabela(1, 5);">    Maio            </button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=6&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 6  ? "active" : ""; ?>" id="nav-Junho-tab"      data-bs-toggle="tab" data-bs-target="#nav-Junho"        type="button" role="tab" aria-controls="nav-Junho"      aria-selected="false" onclick="carregar_tabela(1, 6);">    Junho           </button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=7&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 7  ? "active" : ""; ?>" id="nav-Julho-tab"      data-bs-toggle="tab" data-bs-target="#nav-Julho"        type="button" role="tab" aria-controls="nav-Julho"      aria-selected="false" onclick="carregar_tabela(1, 7);">    Julho           </button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=8&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 8  ? "active" : ""; ?>" id="nav-Agosto-tab"     data-bs-toggle="tab" data-bs-target="#nav-Agosto"       type="button" role="tab" aria-controls="nav-Agosto"     aria-selected="false" onclick="carregar_tabela(1, 8);">    Agosto          </button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=9&ano=<?=$_SESSION['ano']?>"><button class="nav-link  <?php echo $_SESSION['mes_id'] == 9  ? "active" : ""; ?>" id="nav-Setembro-tab"   data-bs-toggle="tab" data-bs-target="#nav-Setembro"     type="button" role="tab" aria-controls="nav-Setembro"   aria-selected="false" onclick="carregar_tabela(1, 9);">    Setembro        </button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=10&ano=<?=$_SESSION['ano']?>"><button class="nav-link <?php echo $_SESSION['mes_id'] == 10 ? "active" : ""; ?>" id="nav-Outubro-tab"    data-bs-toggle="tab" data-bs-target="#nav-Outubro"      type="button" role="tab" aria-controls="nav-Outubro"    aria-selected="false" onclick="carregar_tabela(1, 10);">   Outubro         </button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=11&ano=<?=$_SESSION['ano']?>"><button class="nav-link <?php echo $_SESSION['mes_id'] == 11 ? "active" : ""; ?>" id="nav-Novembro-tab"   data-bs-toggle="tab" data-bs-target="#nav-Novembro"     type="button" role="tab" aria-controls="nav-Novembro"   aria-selected="false" onclick="carregar_tabela(1, 11);">   Novembro        </button></a>
+                                            <a href="?Controller=Despesas_Fixas&Action=listar&mes=12&ano=<?=$_SESSION['ano']?>"><button class="nav-link <?php echo $_SESSION['mes_id'] == 12 ? "active" : ""; ?>" id="nav-Dezembro-tab"   data-bs-toggle="tab" data-bs-target="#nav-Dezembro"     type="button" role="tab" aria-controls="nav-Dezembro"   aria-selected="false" onclick="carregar_tabela(1, 12);">   Dezembro        </button></a>
                                             <a href="?Controller=Despesas_Fixas&Action=novo"><button class="btn btn-primary" id="btnNovaDespesa">Nova Despesa</button></a>
                                         </div>
                                     </nav>
                                 </div>
-                                <!-- Begin Page Content -->
-                                <div class="container-fluid">
-                                    <!-- DataTales Example -->
-                                    <div class="mb-4">
-                                        <div class="card-header py-3">
-                                            <h6 class="m-0 font-weight-bold text-primary">Despesas Fixas Mes de Maio</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Selecionar</th>
-                                                            <th>Descrição</th>
-                                                            <th>Categoria</th>
-                                                            <th>Dia Vencimento</th>
-                                                            <th>Valor</th>
-                                                            <th>Status</th>
-                                                            <th>Usuario</th>
-                                                            <th>Última Atualização</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <th>Selecionar</th>
-                                                            <th>Descrição</th>
-                                                            <th>Categoria</th>
-                                                            <th>Vencimento</th>
-                                                            <th>Valor</th>
-                                                            <th>Status</th>
-                                                            <th>Usuario</th>
-                                                            <th>Última Atualização</th>
-                                                        </tr>
-                                                    </tfoot>
-                                                    <tbody>
-                                                    <?php
-                                                        $return = $_SESSION["data"];
-                                                        foreach($return as $value){
-                                                    ?>
-                                                        <tr>
-                                                            <td><input class='btn-check' autocomplete='off' type='checkbox' id='chbDespesasFixas<?=$value[0]?>' value='<?=$value[0]?>' /><label class='btn btn-outline-primary' for='chbDespesasFixas<?=$value[0]?>'><?=$value[0]?></label></td>
-                                                            <td><?=$value[1]?></td>
-                                                            <td><?=$value[2]?></td>
-                                                            <td><?=$value[3]?></td>
-                                                            <td><?=$value[4]?></td>
-                                                            <td><?=$value[5]?></td>
-                                                            <td><?=$value[6]?></td>
-                                                            <td><?=$value[7]?></td>
-                                                        </tr>
-                                                    <?php
-                                                        }
-                                                    ?>
-                                                    </tbody>
-                                                </table>
-                                                
-                                            </div>
-                                            
-                                        </div>
-                                        <hr>
-                                        <div class="card-body">
-                                            <a href="?Controller=Despesas_Fixas&Action=novo"><button class="btn btn-primary" id="btnNovaDespesa">Nova Despesa</button></a>
-                                        </div>
-                                    </div>
-
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Selecionar</th>
+                                                    <th>Descrição</th>
+                                                    <th>Categoria</th>
+                                                    <th>Dia Vencimento</th>
+                                                    <th>Valor</th>
+                                                    <th>Status</th>
+                                                    <th>Usuario</th>
+                                                    <th>Última Atualização</th>
+                                                </tr>
+                                             </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Selecionar</th>
+                                                    <th>Descrição</th>
+                                                    <th>Categoria</th>
+                                                    <th>Vencimento</th>
+                                                    <th>Valor</th>
+                                                    <th>Status</th>
+                                                    <th>Usuario</th>
+                                                    <th>Última Atualização</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                <?php
+                                                $return = $_SESSION["data_depesas_fixas"];
+                                                foreach($return as $value){
+                                                ?>
+                                                <tr>
+                                                    <td><input class='btn-check' autocomplete='off' type='checkbox' id='chbDespesasFixas<?=$value[0]?>' value='<?=$value[0]?>' /><label class='btn btn-outline-primary' for='chbDespesasFixas<?=$value[0]?>'><?=$value[0]?></label></td>
+                                                    <td><?=$value[1]?></td>
+                                                    <td><?=$value[2]?></td>
+                                                    <td><?=$value[3]?></td>
+                                                    <td><?=$value[4]?></td>
+                                                    <td><?=$value[5]?></td>
+                                                    <td><?=$value[6]?></td>
+                                                    <td><?=$value[7]?></td>
+                                                </tr>
+                                                <?php
+                                                    }
+                                                ?>
+                                            </tbody>
+                                        </table>    
+                                    </div>        
                                 </div>
-                                <!-- /.container-fluid -->
-                                <!--<div class="card-body">
-                                    <div class="tab-content" id="nav-tabContent">
-                                        <div class="tab-pane fade"              id="nav-Janeiro"    role="tabpanel" aria-labelledby="nav-Janeiro-tab"> Janeiro Janeiro Janeiro Janeiro </div>
-                                        <div class="tab-pane fade"              id="nav-Fevereiro"  role="tabpanel" aria-labelledby="nav-Fevereiro-tab"> Fevereiro Fevereiro Fevereiro Fevereiro Fevereiro </div>
-                                        <div class="tab-pane fade"              id="nav-Marco"      role="tabpanel" aria-labelledby="nav-Marco-tab"> Março Março Março Março Março Março</div>
-                                        <div class="tab-pane fade"              id="nav-Abril"      role="tabpanel" aria-labelledby="nav-Abril-tab"> Abril Abril Abril Abril</div>
-                                        <div class="tab-pane fade"              id="nav-Maio"       role="tabpanel" aria-labelledby="nav-Maio-tab"> Maio Maio Maio Maio Maio Maio Maio Maio</div>
-                                        <div class="tab-pane fade"              id="nav-Junho"      role="tabpanel" aria-labelledby="nav-Junho-tab"> Junho junho Junho Junho junho </div>
-                                        <div class="tab-pane fade"              id="nav-Julho"      role="tabpanel" aria-labelledby="nav-Julho-tab"> Julho Julho Julho Julho Julho Julho </div>
-                                        <div class="tab-pane fade"              id="nav-Agosto"     role="tabpanel" aria-labelledby="nav-Agosto-tab"> Agosto Agosto Agosto Agosto Agosto</div>
-                                        <div class="tab-pane fade"              id="nav-Setembro"   role="tabpanel" aria-labelledby="nav-Setembro-tab"> Setembro Setembro Setembro Setembro Setembro</div>
-                                        <div class="tab-pane fade"              id="nav-Outubro"    role="tabpanel" aria-labelledby="nav-Outubro-tab"> Outubro Outubro Outubro Outubro </div>
-                                        <div class="tab-pane fade"              id="nav-Novembro"   role="tabpanel" aria-labelledby="nav-Novembro-tab"> Novembro Novembro Novembro Novembro Novembro</div>
-                                        <div class="tab-pane fade"              id="nav-Dezembro"   role="tabpanel" aria-labelledby="nav-Dezembro-tab"> Dezembro Dezembro Dezembro Dezembro</div>
-                                    </div>                                   
-                                </div>-->
-                                <!--<div class="card-body">
+                                <hr />
+                                <div class="card-body">
                                     <a href="?Controller=Despesas_Fixas&Action=novo"><button class="btn btn-primary" id="btnNovaDespesa">Nova Despesa</button></a>
-                                </div>-->
-                    
+                                </div>
                             </div>
                         </div>
                     </div>

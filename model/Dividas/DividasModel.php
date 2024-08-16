@@ -26,9 +26,17 @@ class DividasModel{
         return $dao->search($word);
     }
 
-    public function getAllModel(){
+    public function getAllModel($codigo_grupo_usuarios, $mes_id, $ano){
         $dao = new DividasDAO();
-        return $dao->getAll();
+        if (empty($mes_id)){
+            $mes_id = date("m");
+            $_SESSION['mes_id'] = $mes_id;
+        }
+        if(empty($ano)){
+            $ano = date("Y");
+            $_SESSION['ano'] = $ano;
+        }
+        return $dao->getAll($codigo_grupo_usuarios, $mes_id, $ano);
     }
 }
 ?>

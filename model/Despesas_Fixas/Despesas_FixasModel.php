@@ -21,6 +21,16 @@ class Despesas_FixasModel{
         return $dao->delete($value);
     }
 
+    public function searchModel($codigo_grupo_usuarios, $word){
+        $dao = new Despesas_FixasDAO();
+        return $dao->search($codigo_grupo_usuarios, $word);
+    }
+
+    public function getRegisterModel($codigo_grupo_usuarios){
+        $dao = new Despesas_FixasDAO();
+        return $dao->getRegister($codigo_grupo_usuarios);
+    }
+
     public function getByIdModel($id_despesas_fixas){
         $dao = new Despesas_FixasDAO();
         $prodDao = $dao->getById($id_despesas_fixas);

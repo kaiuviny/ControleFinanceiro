@@ -13,9 +13,12 @@ class DividasController{
         $model = new DividasModel();
         $vo = new DividasVO();
 
-        $vo->setCartoes_id($_POST['slcCartao']);
+        $vo->setTipo_divida_id($_POST['slcTipoDivida']);
+        $vo->setCartao_id($_POST['slcCartao']);
+        $vo->setCodigo_grupo_usuarios($_SESSION['cod_group_user']);
         $vo->setDescricao($_POST['txtDescricao']);
         $vo->setOrgao_devedor($_POST['txtOrgaoDevedor']);
+        $vo->setSite($_POST['txtSite']);
         $vo->setValor_parcela($_POST['txtValorParcela']);
         $vo->setValor_total($_POST['txtValorTotal']);
         $vo->setNumero_parcelas($_POST['txtNumeroParcelas']);
@@ -33,7 +36,9 @@ class DividasController{
             $_SESSION['msg'] = "Erro ao cadastrar a divida";
         }
 
-        include("view/dividas/dividas.php");
+        //include("view/dividas/dividas.php");
+
+        header("Location: ?Controller=Dividas&Action=listar");
     }
 
     public function atualizar(){
@@ -41,12 +46,15 @@ class DividasController{
         $vo = new DividasVO();
 
         $vo->setId_minha_dividas($_POST['txtIdMinhaDividas']);
-        $vo->setCartoes_id($_POST['slcCartao']);
+        $vo->setTipo_divida_id($_POST['slcTipoDivida']);
+        $vo->setCartao_id($_POST['slcCartao']);
+        $vo->setCodigo_grupo_usuarios($_SESSION['cod_group_user']);
         $vo->setDescricao($_POST['txtDescricao']);
-        $vo->setOrgao_devedor($_POST['txtOrgaoDevedor']);   
+        $vo->setOrgao_devedor($_POST['txtOrgaoDevedor']);
+        $vo->setSite($_POST['txtSite']);   
         $vo->setValor_parcela($_POST['txtValorParcela']);
-        $vo->setValor_total($_POST['txtValorTotal']);
         $vo->setValor_parcela($_POST['txtNumeroParcelas']);
+        $vo->setValor_total($_POST['txtValorTotal']);
         $vo->setData_inicial($_POST['txtDataInicial']);
         $vo->setDia_mes_vencimento($_POST['txtDiaVencimento']);
         $vo->setMulta_atraso($_POST['txtMultaAtraso']);
@@ -55,12 +63,14 @@ class DividasController{
         $vo->setUser_update($_SESSION['user']);
 
         if($model->updateModel($vo)){
-            $_SESSION['msg'] = "Divida cadastrado com sucesso!";
+            $_SESSION['msg'] = "Divida atualizada com sucesso!";
         }
         else{
-            $_SESSION['msg'] = "Erro ao cadastrar a divida";
+            $_SESSION['msg'] = "Erro ao atualizar a divida";
         }
-        include("view/dividas/dividas.php");
+        //include("view/dividas/dividas.php");
+        header("Location: ?Controller=Dividas&Action=listar");
+        
     }
 
     public function novo(){
@@ -71,12 +81,15 @@ class DividasController{
         $model = new DividasModel();
         $vo = $model->getByIdModel($_GET['id_minha_dividas']);
 
-        $_SESSION['cartoes_id'] = $vo->getCartoes_id();
+        $_SESSION['tipo_divida_id'] = $vo->getTipo_divida_id();
+        $_SESSION['cartoes_id'] = $vo->getCartao_id();
+        $_SESSION['cod_group_user'] = $vo->getCodigo_grupo_usuarios();
         $_SESSION['descricao'] = $vo->getDescricao();
         $_SESSION['orgao_devedor'] = $vo->getOrgao_devedor();
+        $_SESSION['site'] = $vo->getSite();
         $_SESSION['valor_parcela'] = $vo->getValor_parcela();
-        $_SESSION['valor_total'] = $vo->getValor_total();
         $_SESSION['numero_parcelas'] = $vo->getNumero_parcelas();
+        $_SESSION['valor_total'] = $vo->getValor_total();
         $_SESSION['data_inicial'] = $vo->getData_inicial();
         $_SESSION['dia_mes_vencimento'] = $vo->getDia_mes_vencimento();
         $_SESSION['multa_atraso'] = $vo->getMulta_atraso();
@@ -110,8 +123,12 @@ class DividasController{
     }
 
     public function listar(){
+        $_SESSION["user"] = "kaiuviny";
+        $_SESSION["cod_group_user"] = 1;
+        $_SESSION['mes_id'] = $_GET["mes"];
+        $_SESSION['ano'] = $_GET['ano'];
         $model = new DividasModel();
-        $_SESSION['data'] = $model->getAllModel();
+        $_SESSION['data_dividas'] = $model->getAllModel($_SESSION["cod_group_user"], $_GET['mes'], $_GET['ano']);
         include ("view/dividas/dividas.php");
     }
 }
