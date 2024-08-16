@@ -1,9 +1,12 @@
 <?php
 class DividasVO{
     private $id_minha_dividas;
-    private $cartoes_id;
+    private $tipo_divida_id;
+    private $cartao_id;
+    private $codigo_grupo_usuarios;
     private $descricao;
     private $orgao_devedor;
+    private $site;
     private $valor_parcela;
     private $valor_total;
     private $numero_parcelas;
@@ -23,11 +26,25 @@ class DividasVO{
         $this->id_minha_dividas = $id_minha_dividas;
     }
 
-    public function getCartoes_id(){
-        return $this->cartoes_id;
+    public function getTipo_divida_id(){
+        return $this->tipo_divida_id;
     }
-    public function setCartoes_id($cartoes_id){
-        $this->cartoes_id = $cartoes_id;
+    public function setTipo_divida_id($tipo_divida_id){
+        $this->tipo_divida_id = $tipo_divida_id;
+    }
+
+    public function getCartao_id(){
+        return $this->cartao_id;
+    }
+    public function setCartao_id($cartao_id){
+        $this->cartao_id = $cartao_id;
+    }
+
+    public function getCodigo_grupo_usuarios(){
+        return $this->codigo_grupo_usuarios;
+    }
+    public function setCodigo_grupo_usuarios($codigo_grupo_usuarios){
+        $this->codigo_grupo_usuarios = $codigo_grupo_usuarios;
     }
 
     public function getDescricao(){
@@ -42,6 +59,13 @@ class DividasVO{
     }
     public function setOrgao_devedor($orgao_devedor){
         $this->orgao_devedor = $orgao_devedor;
+    }
+
+    public function getSite(){
+        return $this->site;
+    }
+    public function setSite($site){
+        $this->site = $site;
     }
 
     public function getValor_parcela(){
@@ -82,6 +106,7 @@ class DividasVO{
     public function getMulta_atraso(){
         return $this->multa_atraso;
     }
+    
     public function setMulta_atraso($multa_atraso){
         $this->multa_atraso = $multa_atraso;
     }

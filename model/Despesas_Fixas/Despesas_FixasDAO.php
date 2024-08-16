@@ -45,9 +45,6 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
         else{
            return false; 
         }
-            
-
-
     }
 
     public function update(Despesas_FixasVO $value){
@@ -83,7 +80,6 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
             return true;
         else
             return false;
-        
     }
 
     public function delete(Despesas_FixasVO $value){
@@ -101,8 +97,53 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
             return true;
         else
             return false;
-
     }
+
+    public function search($codigo_grupo_usuarios, $word)
+    {
+        $query = "SELECT 
+                        *
+                    FROM
+                        controlefinanceiro.despesas_fixas
+                    WHERE
+                        codigo_grupo_usuarios = ?
+                            AND descricao like '%?%';";
+
+        $conn = new Connect();
+        $conn->getConnection();
+        $pstm = $conn->execReader($query);
+        $pstm->bind_param("is", $codigo_grupo_usuarios, $word);
+
+        $array = array();
+        while($rs = $pstm->fetch_object()){
+            $array[] = array($rs->id_despesas_fixas, $rs->descricao, $rs->categoria, (new DateTime($rs->data_cadastro))->format('d'), "R$ ".number_format($rs->valor, 2, ',', '.'), $rs->status, $rs->user_update, (new DateTime($rs->last_update))->format('d/m/Y H:i:s'));
+        }
+        return $array;
+    }
+
+    public function getRegister($codigo_grupo_usuarios)
+    {
+        $query = "SELECT 
+                        *
+                    FROM
+                        controlefinanceiro.despesas_fixas
+                    WHERE
+                        codigo_grupo_usuarios = ?
+                            AND data_cadastro >= SUBDATE(CURDATE(), 1);";
+        
+        $conn = new Connect();
+        $conn->getConnection();
+        $pstm = $conn->execReader($query);
+        $pstm->bind_param("i", $codigo_grupo_usuarios);
+
+        $array = array();
+        while($rs = $pstm->fetch_object()){
+            $array[] = array($rs->id_despesas_fixas, $rs->descricao, $rs->categoria, (new DateTime($rs->data_cadastro))->format('d'), "R$ ".number_format($rs->valor, 2, ',', '.'), $rs->status, $rs->user_update, (new DateTime($rs->last_update))->format('d/m/Y H:i:s'));
+        }
+        return $array;
+    }
+
+
 
     public function getById($id_depesas_fixas)
     {
@@ -147,13 +188,26 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
 
     public function getAll($codigo_grupo_usuarios, $mes_id, $ano)
     {
-        $query = "SELECT
-                    `df`.`id_despesas_fixas`,
+        $query = "SELECT 
+                    `df`.`id_despesa_fixa`,
                     `df`.`descricao`,
                     `c`.`categoria`,
                     `df`.`data_cadastro`,
                     `df`.`valor`,
-                     CASE WHEN (SELECT COUNT(*) FROM `controlefinanceiro`.`pagamento_despesas` WHERE `despesas_id` = `df`.`id_despesas_fixas` AND `tipo_despesas` = 'F' AND `mes_id` = $mes_id AND `ano`=$ano)>0 THEN '<i style=\"color:green;\">Paga</i>' ELSE '<u style=\"color:red;\">A pagar</u>' END AS 'status',
+                    CASE
+                        WHEN
+                            (SELECT 
+                                    COUNT(*)
+                                FROM
+                                    `pagamento_despesas_fixas`
+                                WHERE
+                                    `despesa_fixa_id` = `df`.`id_despesa_fixa`
+                                        AND `mes_id` = $mes_id
+                                        AND `ano` = $ano) > 0
+                        THEN
+                            '<i style=\"color:green;\">Paga</i>'
+                        ELSE '<u style=\"color:red;\">A pagar</u>'
+                    END AS 'status',
                     `df`.`user_update`,
                     `df`.`last_update`
                 FROM
@@ -161,17 +215,17 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
                         INNER JOIN
                     `categorias` AS `c` ON `df`.`categoria_despesas_fixas_id` = `c`.`id_categoria`
                 WHERE
-                    `df`.`codigo_grupo_usuarios` = " . addslashes($codigo_grupo_usuarios) . "
-                    AND `df`.`data_cadastro` <= DATE(CONCAT($ano, '-', $mes_id, '-', 31))
-                    AND `df`.`active` = 'Y';";
+                    `df`.`data_cadastro` <= DATE(CONCAT($ano, '-', $mes_id, '-', 31))
+                        AND `df`.`active` = 'Y'
+                        AND `df`.`codigo_grupo_usuarios` = " . addslashes($codigo_grupo_usuarios);
 
         $conn = new Connect();
         $conn->getConnection();
         $result = $conn->execReader($query);
+        
         $array = array();
-        $vo = new Despesas_FixasVO();
         while($rs = $result->fetch_object()){
-            $array[] = array($rs->id_despesas_fixas, $rs->descricao, $rs->categoria, (new DateTime($rs->data_cadastro))->format('d'), "R$ ".number_format($rs->valor, 2, ',', '.'), $rs->status, $rs->user_update, (new DateTime($rs->last_update))->format('d/m/Y H:i:s'));
+            $array[] = array($rs->id_despesa_fixa, $rs->descricao, $rs->categoria, (new DateTime($rs->data_cadastro))->format('d'), "R$ ".number_format($rs->valor, 2, ',', '.'), $rs->status, $rs->user_update, (new DateTime($rs->last_update))->format('d/m/Y H:i:s'));
         }
         return $array;
     }

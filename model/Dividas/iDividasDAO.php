@@ -5,6 +5,6 @@ interface iDividasDAO{
     public function delete(DividasVO $value);
     public function getById($id);
     public function search($word);
-    public function getAll();
+    public function getAll($codigo_grupo_usuarios, $mes_id, $ano);
 }
 ?>

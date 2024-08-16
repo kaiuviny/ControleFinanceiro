@@ -22,18 +22,6 @@ class Despesas_FixasController{
         $vo->setValor($_POST["txtValor"]);
         $vo->setStatus($_POST["slcStatus"]);
         $vo->setUser_update($_SESSION["user"]);
-
-        /*echo "<h2>";
-        echo "Grupo Usuario ID: " . $vo->getCodigo_grupo_usuarios() . "<br />";
-        echo "Categoria ID: " .$vo->getCategoria_despesas_fixas_id() . "<br />";
-        echo "Mes n.: " . $vo->getMes_id() . "<br />";
-        echo "Ano: " . $vo->getAno() . "<br />";
-        echo "Descricao: " . $vo->getDescricao() . "<br />";
-        echo "Vencimento: " . $vo->getVencimento() . "<br />";
-        echo "Valor: " . $vo->getValor() . "<br />";
-        echo "Status: " . $vo->getStatus() . "<br />";
-        echo "User: " . $vo->getUser_update() . "<br />";
-        echo "</h2>";*/
         
         if($model->insertModel($vo)){
             $_SESSION["msg"] = "Despesa fixa " . $vo->getDescricao() . " cadastrada com sucesso!";
@@ -93,22 +81,36 @@ class Despesas_FixasController{
     }
 
     public function editar(){
+        $model = new Despesas_FixasModel();
+        $vo = $model->getByIdModel($_GET['id']);
+
+        $_SESSION["id"] = $vo->getId_despesas_fixas();
+        $_SESSION["slcCategoria"] = $vo->getCategoria_despesas_fixas_id();
+        $_SESSION["slcMes"] = $vo->getMes_id();
+        $_SESSION["txtAno"] = $vo->getAno();
+        $_SESSION["txtDescricao"] = $vo->getDescricao();
+        $_SESSION["txtVencimento"] = $vo->getVencimento();
+        $_SESSION["txtValor"] = $vo->getValor();
+        $_SESSION["slcStatus"] = $vo->getStatus();
+
+        include("view/despesas/cadastro_despesas_fixas.php");
     }
 
     public function pesquisar(){       
     }
 
+    public function listarRegistro(){
+
+    }
+
     public function listar(){
         $_SESSION["user"] = "kaiuviny";
-        $_SESSION["cod_user"] = 1;
+        $_SESSION["cod_group_user"] = 1;
         $_SESSION['mes_id'] = $_GET["mes"];
         $_SESSION['ano'] = $_GET['ano'];
         $model = new Despesas_FixasModel();
-        $_SESSION["data"] = $model->getAllModel($_SESSION["cod_user"], $_GET["mes"], $_GET['ano']);
+        $_SESSION["data_depesas_fixas"] = $model->getAllModel($_SESSION["cod_group_user"], $_GET["mes"], $_GET['ano']);
         include("view/despesas/despesas_fixas.php");
-        //echo "DATA: <br />";
-
-        //var_dump($_SESSION["data"]);
     }
 }
 ?>
