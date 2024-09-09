@@ -176,7 +176,7 @@ class DividasDAO implements iDividasDAO{
         $conn = new Connect();
         $conn->getConnection();
 
-        $query = "SELECT 
+        $query = "SELECT
                     d.id_minha_divida,
                     td.tipo,
                     CONCAT(c.descricao,
@@ -244,11 +244,11 @@ class DividasDAO implements iDividasDAO{
                     CONCAT(d.multa_atraso, '%') AS multa_atraso,
                     CONCAT(d.juros_por_dia_atraso, '%') AS juros_por_dia_atraso,
                     CONCAT(d.desconto_por_dia_adiantado, '%') AS desconto_por_dia_adiantado,
-                    CONCAT(RIGHT(d.datetime_create, 2),
+                    CONCAT(RIGHT(DATE(d.datetime_create), 2),
                             '/',
                             SUBSTRING(d.datetime_create, 6, 2),
                             '/',
-                            LEFT(d.datetime_create, 4)) AS data_criacao,
+                            LEFT(d.datetime_create, 4), \" \",TIME(d.datetime_create)) AS data_criacao,
                     CASE
                         WHEN
                             (SELECT 
@@ -261,13 +261,56 @@ class DividasDAO implements iDividasDAO{
                         THEN
                             '<i style=\"color:green;\">Paga</i>'
                         ELSE '<u style=\"color:red;\">A pagar</u>'
-                    END AS 'status',
+                    END AS 'status_button',
                     d.user_update AS usuario,
-                    CONCAT(RIGHT(d.last_update, 2),
+                    CONCAT(RIGHT(DATE(d.last_update), 2),
                             '/',
                             SUBSTRING(d.last_update, 6, 2),
                             '/',
-                            LEFT(d.last_update, 4)) AS ultima_atualizacao
+                            LEFT(d.last_update, 4), \" \",TIME(d.last_update)) AS ultima_atualizacao,
+                CASE
+                        WHEN
+                            (SELECT 
+                                    COUNT(*)
+                                FROM
+                                    `pagamento_dividas`
+                                WHERE
+                                    `minha_divida_id` = d.id_minha_divida AND `mes_id` = $mes_id
+                                        AND `ano` = $ano) > 0
+                        THEN
+                            'background-color: lightcyan;'
+                        ELSE 'background-color: transparent;'
+                    END AS 'collor_table',
+                CASE
+                        WHEN
+                            (SELECT 
+                                    COUNT(*)
+                                FROM
+                                    `pagamento_dividas`
+                                WHERE
+                                    `minha_divida_id` = d.id_minha_divida AND `mes_id` = $mes_id
+                                        AND `ano` = $ano) > 0
+                        THEN
+                            'Paga'
+                        ELSE 'Pagar'
+                    END AS 'status',
+                CASE
+                        WHEN
+                            (SELECT 
+                                    COUNT(*)
+                                FROM
+                                    `pagamento_dividas`
+                                WHERE
+                                    `minha_divida_id` = d.id_minha_divida) > 0
+                        THEN
+                            (SELECT 
+                                    MAX(`numero_parcela_paga`)
+                                FROM
+                                    `pagamento_dividas`
+                                WHERE
+                                    `minha_divida_id` = d.id_minha_divida)
+                        ELSE '0'
+                    END AS 'ultima_parcela_paga'
                 FROM
                     dividas AS d
                         INNER JOIN
@@ -285,7 +328,7 @@ class DividasDAO implements iDividasDAO{
         $array = array();
         while($rs = $result->fetch_array()){
             //$array[] = array($rs["id_minha_divida"], $rs["tipo"], $rs["cartao"], $rs["descricao"], $rs["orgao_devedor"], "R$ ".number_format($rs["valor_parcela"], 2, ',', '.'), "R$ ".number_format($rs["valor_total"], 2, ',', '.'), $rs["numero_parcelas"], $rs["data_inicial"], $rs["dia_mes_vencimento"], $rs["multa_atraso"]."%", $rs["juros_por_dia_atraso"]."%", $rs["desconto_por_dia_adiantado"]."%", $rs["user_update"], (new DateTime($rs["datetime_create"]))->format('d/m/Y H:i:s'), (new DateTime($rs["last_update"]))->format('d/m/Y H:i:s'));
-            $array[] = array($rs["id_minha_divida"], $rs["tipo"], $rs["cartao"], $rs["descricao"], $rs["orgao_devedor"], $rs["site"], $rs["valor_parcela"], $rs["numero_parcelas"], $rs["valor_total"], $rs["data_inicial"], $rs["dia_mes_vencimento"], $rs["multa_atraso"], $rs["juros_por_dia_atraso"], $rs["desconto_por_dia_adiantado"], $rs["data_criacao"], $rs["usuario"], $rs["ultima_atualizacao"], $rs["status"]);
+            $array[] = array($rs["id_minha_divida"], $rs["tipo"], $rs["cartao"], $rs["descricao"], $rs["orgao_devedor"], $rs["site"], $rs["valor_parcela"], $rs["numero_parcelas"], $rs["valor_total"], $rs["data_inicial"], $rs["dia_mes_vencimento"], $rs["multa_atraso"], $rs["juros_por_dia_atraso"], $rs["desconto_por_dia_adiantado"], $rs["data_criacao"], $rs["usuario"], $rs["ultima_atualizacao"], $rs["status_button"], $rs["collor_table"], $rs["status"], $rs["ultima_parcela_paga"]);
         }
         return $array;
     }

@@ -1,3 +1,9 @@
+<?php
+$link = mysqli_connect("127.0.0.1", "root", "", "ControleFinanceiro", "33306");
+$resultMesID = mysqli_query($link, "SELECT mes FROM controlefinanceiro.meses WHERE id_mes = ".$_SESSION['mes_id']);
+$rsMesID = mysqli_fetch_object($resultMesID);
+$resultMeses = mysqli_query($link, "SELECT * FROM controlefinanceiro.meses");
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -26,6 +32,7 @@
 
 <body id="page-top">
 
+       
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -122,7 +129,7 @@
                                                 <th>Orgão devedor</th>
                                                 <th>Site do Orgão</th>
                                                 <th>Valor da Parcela</th>
-                                                <th>Número de Parcelas</th>
+                                                <th>Parcelas Pagas</th>
                                                 <th>Valor Total</th>
                                                 <th>Data Inicial</th>
                                                 <th>Dia do Vencimento</th>
@@ -140,7 +147,7 @@
                                             $return = $_SESSION["data_dividas"];
                                             foreach($return as $value){
                                             ?>
-                                            <tr>
+                                            <tr style="<?=$value[18]?>">
                                                 <td><input class='btn-check' autocomplete='off' type='checkbox' id='chbDespesasFixas<?=$value[0]?>' value='<?=$value[0]?>' /><label class='btn btn-outline-primary' for='chbDespesasFixas<?=$value[0]?>'><?=$value[0]?></label></td>
                                                 <td><?=$value[1]?></td>
                                                 <td><?=$value[2]?></td>
@@ -148,7 +155,7 @@
                                                 <td><?=$value[4]?></td>
                                                 <td><?=$value[5]?></td>
                                                 <td><?=$value[6]?></td>
-                                                <td><?=$value[7]?></td>
+                                                <td><?=$value[20]?>/<?=$value[7]?></td>
                                                 <td><?=$value[8]?></td>
                                                 <td><?=$value[9]?></td>
                                                 <td><?=$value[10]?></td>
@@ -158,7 +165,7 @@
                                                 <td><?=$value[14]?></td>
                                                 <td><?=$value[15]?></td>
                                                 <td><?=$value[16]?></td>
-                                                <td><?=$value[17]?></td>
+                                                <td><?php if($value[19] == "Pagar"){ ?><button type="button" class="btn btn-Light" data-toggle="modal" data-target="#mdlPagarDivida" data-minha_divida_id="<?=$value[0]?>" data-descricao_divida="<?=$value[3]?>" data-mes_id="<?=$_SESSION['mes_id']?>" data-ano="<?=$_SESSION['ano']?>" data-numero_parcelas="<?=$value[7]?>" data-parcelas_pagas="<?=$value[20]?>" ><?=$value[17]?> <?php } else { echo "<button class='btn btn-Light'>".$value[17]; } ?></button></td>
                                             </tr>
                                             <?php
                                             }
@@ -220,6 +227,84 @@
         </div>
     </div>
 
+    <!-- Modal Pagar Divida
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mdlPagarDivida" data-minha_divida_id="1">Pagar</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mdlPagarDivida" data-minha_divida_id="2">Open modal for @fat</button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mdlPagarDivida" data-minha_divida_id="3">Open modal for @getbootstrap</button>
+    -->
+        <div class="modal fade" id="mdlPagarDivida" name="mdlPagarDivida" tabindex="-1" role="dialog" aria-labelledby="mdlPagarDividaLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mdlPagarDividaLabel">Minha dívida nº </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="txtMinhaDividaID" class="col-form-label" id="lblMinhaDividaID">Minha Divida ID:</label>
+                                <input type="number" class="form-control" id="txtMinhaDividaID" name="txtMinhaDividaID">
+                            </div>
+                            <div class="form-group">
+                                <label for="slcFormaPagamento" class="col-form-label" id="lblFormaPagamento">Forma de Pagamento</label>
+                                <select class="form-control" id="slcFormaPagamento" name="slcFormaPagamento">
+                                    <option value="1">Boleto</option>
+                                    <option value="2">PIX</option>
+                                    <option value="3">Cartao</option>
+                                    <option value="4">CriptoMoeda</option>
+                                    <option value="5">Dinheiro</option>
+                                    <option value="6">Cheque</option>
+                                </select>     
+                            </div>
+                            <div class="form-group">
+                                <label for="slcCartao" class="col-form-label" id="lblCartao">Cartão</label>
+                                <select class="form-control" id="slcCartao" name="slcCartao">
+                                    <option value="0">Sem Cartão</option>
+                                    <option value="1">Nubank Zelly</option>
+                                    <option value="2">Carrefour Zelly</option>
+                                </select>     
+                            </div>
+                            <div class="form-group">
+                                <label for="slcMes" class="col-form-label" id="lblMes">Mês</label>
+                                <select class="form-control" id="slcMes" name="slcMes">
+                                    <option value="<?=$_SESSION['mes_id']?>"><?=$rsMesID->mes?></option>
+                                    <?php
+                                    while($rsMeses = mysqli_fetch_object($resultMeses)){
+                                        echo "<option value='".$rsMeses->id_mes."'>".$rsMeses->mes."</option>";
+                                    }
+                                    ?>
+                                </select>     
+                            </div>
+                            <div class="form-group">
+                                <label for="slcAno" class="col-form-label" id="lblAno">Ano</label>
+                                <select class="form-control" id="slcAno" name="slcAno">
+                                    <?php
+                                    for($i=2020;$i<=2030;$i++){
+                                        echo "<option value='$i'>".$i."</option>";
+                                    }
+                                    ?>
+                                </select>     
+                            </div>
+                            <div class="form-group">
+                                <label for="txtNumeroParcelaPaga" class="col-form-label" id="lblNumeroParcelaPaga">Número da Parcela Paga<b id="numeroParcelaPaga"></b></label>
+                                <input type="number" class="form-control" id="txtNumeroParcelaPaga" name="txtNumeroParcelaPaga"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtarObservacao" class="col-form-label" id="lblObservacao">Observação:</label>
+                                <textarea class="form-control" id="txtarObservacao" name="txtarObservacao"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar Pagamento</button>
+                        <button type="button" class="btn btn-success">Registrar Pagamento</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
      <!-- Bootstrap core JavaScript-->
      <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -244,7 +329,6 @@
 
     <script>
         function selectYear(controller, action, month, year){
-            
             let prt = window.location.protocol
             let hst = window.location.host
             let pth = window.location.pathname
@@ -252,6 +336,26 @@
             let nUrl = (prt + "//" + hst + pth + act)
             window.location.href = nUrl
         }
+    </script>
+
+    <script>
+        $('#mdlPagarDivida').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var minha_divida_id = button.data('minha_divida_id') // Extract info from data-* attributes
+                var descricao_divida = button.data('descricao_divida')
+                var ano = button.data('ano')
+                var mes_id = button.data('mes_id')
+                var numero_parcelas = button.data('numero_parcelas')
+                var parcelas_pagas = button.data('parcelas_pagas')
+                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                var modal = $(this)
+                modal.find('.modal-title').text('Minha dívida nº ' + minha_divida_id + ": " + descricao_divida)
+                modal.find('#txtMinhaDividaID').val(minha_divida_id)
+                modal.find('#slcAno').val(ano)
+                modal.find('#slcMes').val(mes_id)
+                modal.find('#numeroParcelaPaga').html(" ("+parcelas_pagas + "/" + numero_parcelas + ") ")
+        })
     </script>
 </body>
 
