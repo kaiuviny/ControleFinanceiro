@@ -11,7 +11,6 @@
             $action = $_GET["Action"];
             eval("\$Controller->$action();");
         }
-
     }
     else{
         session_start();
@@ -19,6 +18,6 @@
         $_SESSION["msg"] = "";
         $_SESSION["data"]= "";
         include("index.html");
-
     }
+
 ?>
