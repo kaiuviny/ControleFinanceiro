@@ -382,7 +382,8 @@
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 DIVIDAS TOTAIS
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="divDividasTotais">R$ -</div>
+                                            <br />
+                                            <div class="h5 mb-0 font-weight-bold text-primary" id="divDividasTotais">R$ -</div>
                                         </div>
                                     </div>
                                 </div>
@@ -427,7 +428,7 @@
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 RECEBIMENTOS BRUTO TOTAIS
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="divRecebimentosBrutoTotais">R$ -</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="divRecebimentosBrutoTotais">R$ -</div><!-- Esse é o que eu recebi neste mês até o dia de hoje -->
                                         </div>
                                     </div>
                                 </div>
@@ -494,7 +495,7 @@
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 RECEBIMENTOS LÍQUIDO TOTAIS
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="divRecebimentoTotais">R$ -</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="divRecebimentosLiquidoTotais">R$ -</div><!-- Esse é o que eu recebi neste mês até o dia de hoje -->
                                         </div>
                                     </div>
                                 </div>
@@ -517,7 +518,7 @@
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 DESPESAS TOTAIS
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="todasDespesas">R$ -</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="divDespesasTotais">R$ -</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -536,7 +537,7 @@
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 RECEBIMENTOS
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="recebimentoTotal">R$ -</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="divRecebimentos">R$ -</div> <!-- Esse será o que irei receber até o final do mês, no mês corrente -->
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -557,13 +558,11 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="gastosXrecebimentoPorcentagem">-%</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="divDespesasXReceimentosPercent">-%</div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 94%" aria-valuenow="100" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
+                                                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" id="divPercentDespesasXRecebimentos"></div> <!--style="width: 94%"-->
                                                     </div>
                                                 </div>
                                             </div>
@@ -585,7 +584,7 @@
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 DESPESAS X RECEBIMENTOS
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="gastosXrecebimento">R$ -</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="divDespesasXRecebimentos">R$ -</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -610,7 +609,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 DESPESAS PENDENTES</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="despesasPendentes">R$ -</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="divDespesasPendentes">R$ -</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -628,7 +627,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 DESPESAS PAGAS</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="despesasPagas">R$ -</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="divDespesasPagas">R$ -</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -648,13 +647,11 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="pendentesXpagasPorcentagem">-%</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="divPendentesXPagasPercent">-%</div>
                                                 </div>
                                                 <div class="col">
                                                     <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 94%" aria-valuenow="100" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
+                                                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" id="divPercentPendentesXPagas"></div><!--style="width: 94%"-->
                                                     </div>
                                                 </div>
                                             </div>
@@ -676,7 +673,7 @@
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 PENDENTES X PAGAS 
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="pendentesXpagas">R$ -</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="divPendentesXPagas">R$ -</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -992,20 +989,21 @@
                 console.log("Data: " + data);
                 let myArr = JSON.parse(data);
                 // ------Primeira Linha do DashBoard------- \\
-                $('#divDividasTotais').html('R$ ' + myArr.TOTAL_DIVIDA_DO_MES)
+                $('#divDividasTotais').html('<p>R$ ' + myArr.TOTAL_DIVIDA_DO_MES + ' <small></small></p> <p style="color: red">R$ 5.345,56 <small></small></p> <p style="color: green">R$ ' + myArr.TOTAL_DIVIDA_PAGAS + ' <small></small></p>')
                 $('#divDespesasFixasTotais').html('R$ ' + myArr.TOTAL_DESPESA_FIXAS_DO_MES)
                 $('#divDespesasVariaveisTotais').html('R$ ' + myArr.TOTAL_DESPESAS_VARIAVEIS_MES)
                 $('#divRecebimentosBrutoTotais').html('R$ ' + myArr.TOTAL_RECEBIMENTOS_BRUTO_MES)
                 // ------Segunda Linha do DashBoard------- \\
                 $('#divDividasPagas').html('R$ ' + myArr.TOTAL_DIVIDA_PAGAS)
-                /*$('#todasDespesas').html('R$ '+myArr.DESPESAS_TOTAIS)
-                $('#recebimentoTotal').html('R$ '+myArr.RECEBIMENTOS_TOTAIS)
-                $('#gastosXrecebimentoPorcentagem').html("(94%)")
-                $('#gastosXrecebimento').html('R$ '+myArr.DESPESAS_X_RECEBIMENTOS)
-                $('#despesasPendentes').html('R$ ' + '5.232,43')
-                $('#despesasPagas').html('R$ ' + '3.199,27')
-                $('#pendentesXpagasPorcentagem').html('(37%)')
-                $('#pendentesXpagas').html('R$ ' + ' 2.378,19')*/
+                $('#divDespesasFixasPagas').html('R$ ' + myArr.TOTAL_DESPESAS_FIXAS_PAGAS)
+                $('#divDespesasVariaveisPagas').html('R$ ' + myArr.TOTAL_DESPESAS_VARIAVEIS_PAGAS)
+                $('#divRecebimentosLiquidoTotais').html('R$ ' + myArr.TOTAL_RECEBIMENTOS_LIQUIDOS)
+                // ------Terceira Linha do DashBoard------- \\
+                let DESPESAS_TOTAIS = Number(myArr.TOTAL_DIVIDA_DO_MES) + Number(myArr.TOTAL_DESPESA_FIXAS_DO_MES)
+                $('#divDespesasTotais').html('R$ ' + DESPESAS_TOTAIS)
+
+
+                
   
                } 
             });
