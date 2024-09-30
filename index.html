@@ -989,7 +989,7 @@
                 console.log("Data: " + data);
                 let myArr = JSON.parse(data);
                 // ------Primeira Linha do DashBoard------- \\
-                $('#divDividasTotais').html('<p>R$ ' + myArr.TOTAL_DIVIDA_DO_MES + ' <small></small></p> <p style="color: red">R$ 5.345,56 <small></small></p> <p style="color: green">R$ ' + myArr.TOTAL_DIVIDA_PAGAS + ' <small></small></p>')
+                $('#divDividasTotais').html('<p>R$ ' + myArr.TOTAL_DIVIDA_DO_MES + ' <small></small></p> <p style="color: red">'+my.Arr.TOTAL_DIVIDA_NAO_PAGAS_ANTERIORES_ATE_ESTE_MES+' <small></small></p> <p style="color: green">R$ ' + myArr.TOTAL_DIVIDA_PAGAS + ' <small></small></p>')
                 $('#divDespesasFixasTotais').html('R$ ' + myArr.TOTAL_DESPESA_FIXAS_DO_MES)
                 $('#divDespesasVariaveisTotais').html('R$ ' + myArr.TOTAL_DESPESAS_VARIAVEIS_MES)
                 $('#divRecebimentosBrutoTotais').html('R$ ' + myArr.TOTAL_RECEBIMENTOS_BRUTO_MES)
