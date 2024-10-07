@@ -1,5 +1,5 @@
 <?php
-    error_reporting(E_ALL & ~E_WARNING);
+    //error_reporting(E_ALL & ~E_WARNING);
     if(isset($_GET["Controller"])){
         include "controller/".$_GET["Controller"]."/".$_GET["Controller"]."Controller.php";
 

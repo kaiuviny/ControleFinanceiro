@@ -2,7 +2,7 @@
 // dia do mes
 $dayMoth = date("m");
 //conexao
-$link = mysqli_connect("127.0.0.1", "root", "", "ControleFinanceiro", "33306");
+$link = mysqli_connect("127.0.0.1", "root", "", "ControleFinanceiro", "3306");
 //Categoria
 $queryCategoria = "SELECT 
                 `id_categoria`, `categoria`
