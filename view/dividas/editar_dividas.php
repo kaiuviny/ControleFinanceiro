@@ -5,7 +5,7 @@ $_SESSION["user"] = "kaiuviny";
 // dia do mes
 $dayMoth = date("m");
 //conexao
-$link = mysqli_connect("127.0.0.1", "root", "", "ControleFinanceiro", "33306");
+$link = mysqli_connect("127.0.0.1", "root", "", "ControleFinanceiro", "3306");
 //Cartoes de acordo com o grupo de usuario
 $queryCartoes = "SELECT 
                         c.id_cartao, c.banco, p.primeiro_nome, p.sobre_nome

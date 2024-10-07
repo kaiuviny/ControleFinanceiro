@@ -1,5 +1,5 @@
 <?php
-$link = mysqli_connect("127.0.0.1", "root", "", "ControleFinanceiro", "33306");
+$link = mysqli_connect("127.0.0.1", "root", "", "ControleFinanceiro", "3306");
 $resultMesID = mysqli_query($link, "SELECT mes FROM controlefinanceiro.meses WHERE id_mes = ".$_SESSION['mes_id']);
 $rsMesID = mysqli_fetch_object($resultMesID);
 $resultMeses = mysqli_query($link, "SELECT * FROM controlefinanceiro.meses");
