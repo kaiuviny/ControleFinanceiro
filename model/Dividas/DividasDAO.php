@@ -10,7 +10,7 @@ class DividasDAO implements iDividasDAO{
                            `codigo_grupo_usuarios`,
                             `descricao`,
                              `orgao_devedor`,
-                              `site`
+                              `site`,
                                `valor_parcela`,
                                 `valor_total`,
                                  `numero_parcelas`,
