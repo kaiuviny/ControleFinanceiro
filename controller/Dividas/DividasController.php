@@ -29,7 +29,9 @@ class DividasController{
         $vo->setDesconto_por_dia_Adiantado($_POST['txtDescontoDiario']);
         $vo->setUser_update($_SESSION['user']);
 
-        if($model->insertModel($vo)){
+        //echo "VO: <br />".var_dump($vo);
+   
+       if($model->insertModel($vo)){
             $_SESSION['msg'] = "Divida cadastrado com sucesso!";
         }
         else{

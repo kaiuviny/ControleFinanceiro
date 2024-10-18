@@ -1,6 +1,6 @@
 <?php
 //session_start();
-$_SESSION["cod_user"] = 1;
+$_SESSION["cod_group_user"] = 1;
 $_SESSION["user"] = "kaiuviny";
 // dia do mes
 $dayMoth = date("m");
@@ -23,7 +23,7 @@ $queryCartoes = "SELECT
                     bancos AS b ON c.banco_id = b.id_banco
                 WHERE
                     c.active = 'Y' AND u.active = 'Y'
-                        AND gu.codigo_grupo = " . $_SESSION["cod_user"];
+                        AND gu.codigo_grupo = " . $_SESSION["cod_group_user"];
 $resultCartoes = mysqli_query($link, $queryCartoes);
 
 
@@ -94,7 +94,7 @@ $resultTipoDividas = mysqli_query($link, $queryDividas);
                                             <div class="card-body">
                                                 <form  name="frmLogin" id="frmLogin" method="post" action="?Controller=Dividas&Action=salvar">
                                                     <aside class="row">
-                                                        <div class="offset-md-2 col-md-4">
+                                                        <div class="offset-md-2 col-md-2">
                                                             <label class="label form-label" for="slcTipoDivida" id="lblTipoDivida">(*)Tipo de Divida:</label>
                                                             <select class="form-control" id="slcTipoDivida" name="slcTipoDivida" required>
                                                                 <option value="">--Selecione uma divida--</option>
@@ -105,7 +105,7 @@ $resultTipoDividas = mysqli_query($link, $queryDividas);
                                                                 ?>
                                                             </select>
                                                         </div>
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-2">
                                                             <label class="label form-label" for="slcCartao" id="lblCartao">Cartão:</label>
                                                             <select class="form-control" id="slcCartao" name="slcCartao">
                                                                 <option value="0">Sem Cartão</option>
@@ -116,17 +116,21 @@ $resultTipoDividas = mysqli_query($link, $queryDividas);
                                                                 ?>
                                                             </select>
                                                         </div>
+                                                        <div class="col-md-4">
+                                                            <label class="label form-label" for="txtDescricao" id="lblDescricao">(*)Descrição:</label>
+                                                            <input class="form-control" id="txtDescricao" name="txtDescricao" maxlength="255" required >
+                                                        </div>
                                                     </aside>
                                                     <aside class="row"><div class="offset-md-2 col-md-8"><hr /></div></aside>
                                                     <br />
                                                     <aside class="row">            
-                                                        <div class="offset-md-2 col-md-4">
-                                                            <label class="label form-label" for="txtDescricao" id="lblDescricao">(*)Descrição:</label>
-                                                            <input class="form-control" id="txtDescricao" name="txtDescricao" maxlength="255" required >
-                                                        </div>
-                                                        <div class="col-md-4">
+                                                        <div class="offset-md-2  col-md-4">
                                                             <label class="label form-label" for="txtOrgaoDevedor" id="lblOrgaoDevedor">(*)Orgão Devedor:</label>
                                                             <input class="form-control" id="txtOrgaoDevedor" name="txtOrgaoDevedor" maxlength="45"  required />
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label class="label form-label" for="txtSite" id="lblSite">Site:</label>
+                                                            <input class="form-control" id="txtSite" name="txtSite" maxlength="45"  required />
                                                         </div>
                                                     </aside>
                                                     <aside class="row"><div class="offset-md-2 col-md-8"><hr /></div></aside>

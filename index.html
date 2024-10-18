@@ -398,7 +398,7 @@
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 DEPESAS FIXAS TOTAIS
                                             </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="divDespesasFixasTotais">R$ -</div>
+                                            <div class="h5 mb-0 font-weight-bold text-primary" id="divDespesasFixasTotais">R$ -</div>
                                         </div>
                                     </div>
                                 </div>
@@ -984,13 +984,13 @@
             $.ajax({
                type: "POST",
                data: {action:"action"},
-               url: "controller/Dashboard/teste.php",
+               url: "controller/Dashboard/dashboard_mensal.php",
                success: function(data){
                 console.log("Data: " + data);
                 let myArr = JSON.parse(data);
                 // ------Primeira Linha do DashBoard------- \\
-                $('#divDividasTotais').html('<p>R$ ' + myArr.TOTAL_DIVIDA_DO_MES + ' <small></small></p> <p style="color: red">'+my.Arr.TOTAL_DIVIDA_NAO_PAGAS_ANTERIORES_ATE_ESTE_MES+' <small></small></p> <p style="color: green">R$ ' + myArr.TOTAL_DIVIDA_PAGAS + ' <small></small></p>')
-                $('#divDespesasFixasTotais').html('R$ ' + myArr.TOTAL_DESPESA_FIXAS_DO_MES)
+                $('#divDividasTotais').html('<p>R$<br />' + myArr.TOTAL_DIVIDA_VALOR_TOTAL + '<small>(Total)</small></p> <p style="color: orange">R$ '+ myArr.TOTAL_DIVIDAS_NAO_PAGAS_MES + '<small>(Parcelas)</small></p> <p style="color: red">R$ ' + myArr.TOTAL_DIVIDAS_NAO_PAGAS_VENCIDAS + '<small>(Atrasadas)</small></p>')
+                $('#divDespesasFixasTotais').html('<br/><p>R$<br />' + myArr.TOTAL_DESPESA_FIXAS_DO_MES + '<small>(Total)</small></p> <p style="color: orange">R$ ' + myArr.TOTAL_DESPESAS_FIXAS_NAO_PAGAS_ESTE_MES + '<small>(Devidas)</small></p> <p style="color: red">R$ '+ myArr.TOTAL_DESPESAS_FIXAS_NAO_PAGAS_VENCIDAS_ESTE_MES + '<small>(Vencidas)</small></p>')
                 $('#divDespesasVariaveisTotais').html('R$ ' + myArr.TOTAL_DESPESAS_VARIAVEIS_MES)
                 $('#divRecebimentosBrutoTotais').html('R$ ' + myArr.TOTAL_RECEBIMENTOS_BRUTO_MES)
                 // ------Segunda Linha do DashBoard------- \\
