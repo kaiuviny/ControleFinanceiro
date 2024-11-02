@@ -35,7 +35,7 @@ $resultCartoes = mysqli_query($link, $queryCartoes);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Cadastro de Despesas Variaveis</title>
+    <title>Atualização de Dividas</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- Custom fonts for this template-->
@@ -74,7 +74,7 @@ $resultCartoes = mysqli_query($link, $queryCartoes);
                             <!-- Circle Buttons -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">REGISTRAR MINHAS DIVIDAS</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">ATUALIZAR MINHAS DIVIDAS</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="tab-content" id="nav-tabContent">

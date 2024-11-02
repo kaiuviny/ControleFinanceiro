@@ -31,9 +31,9 @@ class Despesas_FixasModel{
         return $dao->getRegister($codigo_grupo_usuarios);
     }
 
-    public function getByIdModel($id_despesas_fixas){
+    public function getByIdModel($id_despesa_fixa){
         $dao = new Despesas_FixasDAO();
-        $prodDao = $dao->getById($id_despesas_fixas);
+        $prodDao = $dao->getById($id_despesa_fixa);
 
         $prodDao->setVencimento((new DateTime($prodDao->getVencimento()))->format('d'));
         $prodDao->setValor("R$ " . str_replace('.', ',', $prodDao->getValor()));
