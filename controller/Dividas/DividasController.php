@@ -127,8 +127,8 @@ class DividasController{
     public function listar(){
         $_SESSION["user"] = "kaiuviny";
         $_SESSION["cod_group_user"] = 1;
-        $_SESSION['mes_id'] = $_GET["mes"];
-        $_SESSION['ano'] = $_GET['ano'];
+        $_SESSION['page'] = 'Despesas_fixas';
+
         $model = new DividasModel();
         $_SESSION['data_dividas'] = $model->getAllModel($_SESSION["cod_group_user"], $_GET['mes'], $_GET['ano']);
         include ("view/dividas/dividas.php");

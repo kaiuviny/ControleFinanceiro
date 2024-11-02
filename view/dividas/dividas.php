@@ -118,6 +118,7 @@ $resultMeses = mysqli_query($link, "SELECT * FROM controlefinanceiro.meses");
                                                 <th>Usuário</th>
                                                 <th>Ultima Atualização</th>
                                                 <th>Status</th>
+                                                <th>Ações</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -140,6 +141,7 @@ $resultMeses = mysqli_query($link, "SELECT * FROM controlefinanceiro.meses");
                                                 <th>Usuário</th>
                                                 <th>Ultima Atualização</th>
                                                 <th>Status</th>
+                                                <th>Atualizar</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
@@ -166,6 +168,7 @@ $resultMeses = mysqli_query($link, "SELECT * FROM controlefinanceiro.meses");
                                                 <td><?=$value[15]?></td>
                                                 <td><?=$value[16]?></td>
                                                 <td><?php if($value[19] == "Pagar"){ ?><button type="button" class="btn btn-Light" data-toggle="modal" data-target="#mdlPagarDivida" data-minha_divida_id="<?=$value[0]?>" data-descricao_divida="<?=$value[3]?>" data-mes_id="<?=$_SESSION['mes_id']?>" data-ano="<?=$_SESSION['ano']?>" data-numero_parcelas="<?=$value[7]?>" data-parcelas_pagas="<?=$value[20]?>" ><?=$value[17]?> <?php } else { echo "<button class='btn btn-Light'>".$value[17]; } ?></button></td>
+                                                <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#mdlAtualizarDivida">Atualizar Dívida</button></td>
                                             </tr>
                                             <?php
                                             }
@@ -294,6 +297,88 @@ $resultMeses = mysqli_query($link, "SELECT * FROM controlefinanceiro.meses");
                             <div class="form-group">
                                 <label for="txtarObservacao" class="col-form-label" id="lblObservacao">Observação:</label>
                                 <textarea class="form-control" id="txtarObservacao" name="txtarObservacao"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar Pagamento</button>
+                        <button type="button" class="btn btn-success">Registrar Pagamento</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- Modal Atualizar Divida -->                           
+        <div class="modal fade" id="mdlAtualizarDivida" name="mdlAtualizarDivida" tabindex="-1" role="dialog" aria-labelledby="mdlAtualizarDividaLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mdlAtualizarDividaLabel">Minha dívida nº </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="txtMinhaDividaID" class="col-form-label" id="lblMinhaDividaID">Minha Divida ID:</label>
+                                <input type="number" class="form-control" id="txtMinhaDividaID" name="txtMinhaDividaID">
+                            </div>
+                            <div class="form-group">
+                                <label for="slcFormaPagamento" class="col-form-label" id="lblFormaPagamento">Descrição</label>
+                                <select class="form-control" id="slcFormaPagamento" name="slcFormaPagamento">
+                                    <option value="1">Boleto</option>
+                                    <option value="2">PIX</option>
+                                    <option value="3">Cartao</option>
+                                    <option value="4">CriptoMoeda</option>
+                                    <option value="5">Dinheiro</option>
+                                    <option value="6">Cheque</option>
+                                </select>     
+                            </div>
+                            <div class="form-group">
+                                <label for="slcCartao" class="col-form-label" id="lblCartao">Orgão Devedor</label>
+                                <select class="form-control" id="slcCartao" name="slcCartao">
+                                    <option value="0">Sem Cartão</option>
+                                    <option value="1">Nubank Zelly</option>
+                                    <option value="2">Carrefour Zelly</option>
+                                </select>     
+                            </div>
+                            <div class="form-group">
+                                <label for="slcMes" class="col-form-label" id="lblMes">Site</label>
+                                <select class="form-control" id="slcMes" name="slcMes">
+                                    <option value="<?=$_SESSION['mes_id']?>"><?=$rsMesID->mes?></option>
+                                    <?php
+                                    while($rsMeses = mysqli_fetch_object($resultMeses)){
+                                        echo "<option value='".$rsMeses->id_mes."'>".$rsMeses->mes."</option>";
+                                    }
+                                    ?>
+                                </select>     
+                            </div>
+                            <div class="form-group">
+                                <label for="slcAno" class="col-form-label" id="lblAno">Valor da Parcela</label>
+                                <select class="form-control" id="slcAno" name="slcAno">
+                                    <?php
+                                    for($i=2020;$i<=2030;$i++){
+                                        echo "<option value='$i'>".$i."</option>";
+                                    }
+                                    ?>
+                                </select>     
+                            </div>
+                            <div class="form-group">
+                                <label for="txtNumeroParcelaPaga" class="col-form-label" id="lblNumeroParcelaPaga">Número de Parcelas<b id="numeroParcelaPaga"></b></label>
+                                <input type="number" class="form-control" id="txtNumeroParcelaPaga" name="txtNumeroParcelaPaga"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtarObservacao" class="col-form-label" id="lblObservacao">Valor Total da Dívida:</label>
+                                <input class="form-control" id="txtarObservacao" name="txtarObservacao"></input>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtarObservacao" class="col-form-label" id="lblObservacao">Data Inicial da Dívida</label>
+                                <input class="form-control" id="txtarObservacao" name="txtarObservacao"></input>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtarObservacao" class="col-form-label" id="lblObservacao">Dia do Vencimento no Mês</label>
+                                <input class="form-control" id="txtarObservacao" name="txtarObservacao"></input>
                             </div>
                         </form>
                     </div>

@@ -1,6 +1,6 @@
 <?php
     class Despesas_FixasVO{
-        private $id_despesas_fixas;
+        private $id_despesa_fixa;
         private $codigo_grupo_usuarios;
         private $categoria_despesas_fixas_id;
         private $categoria;
@@ -13,11 +13,11 @@
         private $user_update;
         private $last_update;
 
-        public function getId_despesas_fixas(){
-            return $this->id_despesas_fixas;
+        public function getId_despesa_fixa(){
+            return $this->id_despesa_fixa;
         }
-        public function setId_despesas_fixas($id_despesas_fixas){
-            $this->id_despesas_fixas = $id_despesas_fixas;
+        public function setId_despesa_fixa($id_despesa_fixa){
+            $this->id_despesa_fixa = $id_despesa_fixa;
         }
         
         public function getCodigo_grupo_usuarios(){

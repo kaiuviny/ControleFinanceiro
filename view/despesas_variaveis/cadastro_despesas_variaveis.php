@@ -7,7 +7,7 @@ $link = mysqli_connect("127.0.0.1", "root", "", "ControleFinanceiro", "3306");
 $queryCategoria = "SELECT 
                 `id_categoria`, `categoria`
             FROM
-                `controlefinanceiro`.`categorias`
+               `categorias`
             WHERE
                 `tipo_despesas` = 'V'
                  AND `active` = 'Y';";

@@ -47,7 +47,7 @@ class Despesas_FixasController{
         $vo->setValor($_POST["txtValor"]);
         $vo->setStatus($_POST["slcStatus"]);
         $vo->setUser_update($_POST["txtUser"]);
-        $vo->setId_despesas_fixas($_POST["txtId_despesas_fixas"]);
+        $vo->setId_despesa_fixa($_POST["txtId_despesa_fixa"]);
 
         if($model->updateModel($vo)){
             $_SESSION["msg"] = "Despesas Fixa atualizada com sucesso!";
@@ -56,7 +56,7 @@ class Despesas_FixasController{
             $_SESSION["msg"] = "OPS! Ocorreu um erro ao atualizar a despesa fixa.";
         }
 
-        include ("view/despesas/despesas_fixas.php");
+        include ("view/despesas_fixas/despesas_fixas.php");
     }
 
     public function deletar(){
@@ -77,14 +77,14 @@ class Despesas_FixasController{
     public function novo(){
         $_SESSION["user"] = "kaiuviny";
         $_SESSION["cod_user"] = 1; 
-        include ("view/despesas/cadastro_despesas_fixas.php");
+        include ("view/despesas_fixas/cadastro_despesas_fixas.php");
     }
 
     public function editar(){
         $model = new Despesas_FixasModel();
         $vo = $model->getByIdModel($_GET['id']);
 
-        $_SESSION["id"] = $vo->getId_despesas_fixas();
+        $_SESSION["id"] = $vo->getId_despesa_fixa();
         $_SESSION["slcCategoria"] = $vo->getCategoria_despesas_fixas_id();
         $_SESSION["slcMes"] = $vo->getMes_id();
         $_SESSION["txtAno"] = $vo->getAno();
@@ -93,7 +93,7 @@ class Despesas_FixasController{
         $_SESSION["txtValor"] = $vo->getValor();
         $_SESSION["slcStatus"] = $vo->getStatus();
 
-        include("view/despesas/cadastro_despesas_fixas.php");
+        include("view/despesas_fixas/cadastro_despesas_fixas.php");
     }
 
     public function pesquisar(){       
@@ -110,7 +110,7 @@ class Despesas_FixasController{
         $_SESSION['ano'] = $_GET['ano'];
         $model = new Despesas_FixasModel();
         $_SESSION["data_depesas_fixas"] = $model->getAllModel($_SESSION["cod_group_user"], $_GET["mes"], $_GET['ano']);
-        include("view/despesas/despesas_fixas.php");
+        include("view/despesas_fixas/despesas_fixas.php");
     }
 }
 ?>

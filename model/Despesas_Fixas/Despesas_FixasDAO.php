@@ -68,13 +68,13 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
         $valor = $value->getValor();
         $status = $value->getStatus();
         $user_update = $value->getUser_update();
-        $id_despesas_fixas = $value->getId_despesas_fixas();
+        $id_despesa_fixa = $value->getId_despesa_fixa();
 
         $conn = new Connect();
         $conn->getConnection();
 
         $pstm = $conn->execSql($query);
-        $pstm->bind_param("iiisssssi", $categoria_despesas_fixas_id, $mes_id, $ano, $descricao, $vencimento, $valor, $status, $user_update, $id_despesas_fixas);
+        $pstm->bind_param("iiisssssi", $categoria_despesas_fixas_id, $mes_id, $ano, $descricao, $vencimento, $valor, $status, $user_update, $id_despesa_fixa);
         
         if($pstm->execute())
             return true;
@@ -83,15 +83,15 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
     }
 
     public function delete(Despesas_FixasVO $value){
-        $query = "DELETE FROM `despesas_fixas` WHERE `id_despesas_fixas` = ?";
+        $query = "DELETE FROM `despesas_fixas` WHERE `id_despesa_fixa` = ?";
 
-        $id_depesas_fixas = $value->getId_despesas_fixas();
+        $id_despesa_fixa = $value->getId_despesa_fixa();
 
         $conn = new Connect();
         $conn->getConnection();
 
         $pstm = $conn->execSql($query);
-        $pstm->bind_param("i", $id_depesas_fixas);
+        $pstm->bind_param("i", $id_despesa_fixa);
 
         if($pstm->execute())
             return true;
@@ -104,10 +104,10 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
         $query = "SELECT 
                         *
                     FROM
-                        controlefinanceiro.despesas_fixas
+                        `despesas_fixas`
                     WHERE
-                        codigo_grupo_usuarios = ?
-                            AND descricao like '%?%';";
+                        `codigo_grupo_usuarios` = ?
+                            AND `descricao` like '%?%';";
 
         $conn = new Connect();
         $conn->getConnection();
@@ -116,39 +116,15 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
 
         $array = array();
         while($rs = $pstm->fetch_object()){
-            $array[] = array($rs->id_despesas_fixas, $rs->descricao, $rs->categoria, (new DateTime($rs->data_cadastro))->format('d'), "R$ ".number_format($rs->valor, 2, ',', '.'), $rs->status, $rs->user_update, (new DateTime($rs->last_update))->format('d/m/Y H:i:s'));
+            $array[] = array($rs->id_despesa_fixa, $rs->descricao, $rs->categoria, (new DateTime($rs->data_cadastro))->format('d'), "R$ ".number_format($rs->valor, 2, ',', '.'), $rs->status, $rs->user_update, (new DateTime($rs->last_update))->format('d/m/Y H:i:s'));
         }
         return $array;
     }
 
     public function getRegister($codigo_grupo_usuarios)
     {
-        $query = "SELECT 
-                        *
-                    FROM
-                        controlefinanceiro.despesas_fixas
-                    WHERE
-                        codigo_grupo_usuarios = ?
-                            AND data_cadastro >= SUBDATE(CURDATE(), 1);";
-        
-        $conn = new Connect();
-        $conn->getConnection();
-        $pstm = $conn->execReader($query);
-        $pstm->bind_param("i", $codigo_grupo_usuarios);
-
-        $array = array();
-        while($rs = $pstm->fetch_object()){
-            $array[] = array($rs->id_despesas_fixas, $rs->descricao, $rs->categoria, (new DateTime($rs->data_cadastro))->format('d'), "R$ ".number_format($rs->valor, 2, ',', '.'), $rs->status, $rs->user_update, (new DateTime($rs->last_update))->format('d/m/Y H:i:s'));
-        }
-        return $array;
-    }
-
-
-
-    public function getById($id_depesas_fixas)
-    {
         $query = "SELECT
-                        `df`.`id_despesas_fixas`,
+                        `df`.`id_despesa_fixa`,
                         `df`.`descricao`,
                         `df`.`categoria_despesas_fixas_id`,
                         `c`.`categoria`,
@@ -162,7 +138,41 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
                             INNER JOIN
                         `categorias` AS `c` ON `df`.`categoria_despesas_fixas_id` = `c`.`id_categoria`
                     WHERE
-                        `df`.`id_despesas_fixas` = " . addslashes($id_depesas_fixas);
+                        `df`.`codigo_grupo_usuarios` = ?
+                            AND `df`.`data_cadastro` >= SUBDATE(CURDATE(), 1);";
+        
+        $conn = new Connect();
+        $conn->getConnection();
+        $pstm = $conn->execReader($query);
+        $pstm->bind_param("i", $codigo_grupo_usuarios);
+
+        $array = array();
+        while($rs = $pstm->fetch_object()){
+            $array[] = array($rs->id_despesas_fixa, $rs->descricao, $rs->categoria, (new DateTime($rs->data_cadastro))->format('d'), "R$ ".number_format($rs->valor, 2, ',', '.'), $rs->status, $rs->user_update, (new DateTime($rs->last_update))->format('d/m/Y H:i:s'));
+        }
+        return $array;
+    }
+
+
+
+    public function getById($id_despesa_fixa)
+    {
+        $query = "SELECT
+                        `df`.`id_despesa_fixa`,
+                        `df`.`descricao`,
+                        `df`.`categoria_despesas_fixas_id`,
+                        `c`.`categoria`,
+                        `df`.`data_cadastro`,
+                        `df`.`valor`,
+                        `df`.`status`,
+                        `df`.`user_update`,
+                        `df`.`last_update`
+                    FROM
+                        `despesas_fixas` AS `df`
+                            INNER JOIN
+                        `categorias` AS `c` ON `df`.`categoria_despesas_fixas_id` = `c`.`id_categoria`
+                    WHERE
+                        `df`.`id_despesas_fixas` = " . addslashes($id_despesa_fixa);
         $conn = new Connect();
         $conn->getConnection();
         $result = $conn->execReader($query);
@@ -173,7 +183,7 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
         //$rs = $result->fetch_object(MYSQLI_ASSOC);
         $rs = $result->fetch_object();
 
-        $vo->setId_despesas_fixas($rs->id_despesas_fixas);
+        $vo->setId_despesa_fixa($rs->id_despesa_fixa);
         $vo->setDescricao($rs->descricao);
         $vo->setCategoria_despesas_fixas_id($rs->categoria_despesas_fixas_id);
         $vo->setCategoria($rs->categoria);
