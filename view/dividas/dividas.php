@@ -94,7 +94,20 @@ $resultMeses = mysqli_query($link, "SELECT * FROM controlefinanceiro.meses");
                                 
                                 <!-- Begin Page Content -->
                                 <div class="card-body">
-                                    <a href="?Controller=Dividas&Action=novo"><button class="btn btn-primary" id="btnNovaDespesa">Cadastrar Nova Divida</button></a>
+                                    <section class="container-fluid">
+                                            <div class="row" >
+                                                <div class="col-md-3" style="text-align: left;">
+                                                    <a href="?Controller=Dividas&Action=novo"><button class="btn btn-primary" id="btnNovaDespesa">Cadastrar Nova Divida</button></a> 
+                                                </div>
+                                                <div class="col-md-3" style="text-align: right;">
+                                                    <input type="search" id="txtSearchDivida" class="form-control" />
+                                                </div>
+                                                <div class="col-md-3" style="text-align: left;">
+                                                <button class="btn btn-primary" id="btnNovaDespesa" onclick="window.location.href = '?Controller=Dividas&Action=pesquisar&word='+$('#txtSearchDivida').val()">Pesquisar</button>
+                                                </div>
+                                            </div>
+                                    </section>
+                                    
                                     <hr />
                                     <div class="table-responsive">
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

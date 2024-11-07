@@ -133,13 +133,43 @@ class Despesas_VariaveisDAO implements iDespesas_VariaveisDAO{
     }
 
     public function search($codigo_grupo_usuarios, $word){
-        $query = "SELECT
-                    *
-                  FROM
-                    `depesas_variaveis`
-                  WHERE
-                    `código_grupo_usuarios` = ?
-                        AND (`descricao` LIKE '%?%' OR `observacao_estabelecimento` LIKE '%?%');";
+        $query = "SELECT 
+                    dv.id_despesa_variavel,
+                    dv.mes_id,
+                    dv.ano,
+                    c.categoria,
+                    e.estabelecimento,
+                    te.tipo_estabelecimento,
+                    dv.observacao_estabelecimento,
+                    dv.descricao,
+                    dv.valor,
+                    dv.data_utilizada,
+                    dv.datetime_create,
+                    dv.user_update,
+                    dv.last_update,
+                    fp.tipo as tipo_forma_pagamento,
+                    ct.descricao AS descricao_cartao,
+                    pdv.valor_pago,
+                    pdv.data_pagamento,
+                    pdv.user_update AS user_update_pdv,
+                    pdv.last_update AS last_update_pdv
+                FROM
+                    despesas_variaveis AS dv
+                        INNER JOIN
+                    categorias AS c ON dv.categoria_despesas_variaveis_id = c.id_categoria
+                        INNER JOIN
+                    estabelecimentos AS e ON dv.estabelecimento_id = e.id_estabelecimento
+                        INNER JOIN
+                    tipo_estabelecimentos AS te ON dv.tipo_estabelecimento_id = te.id_tipo_estabelecimento
+                        INNER JOIN
+                    pagamento_despesas_variaveis AS pdv ON dv.id_despesa_variavel = pdv.despesa_variavel_id
+                        INNER JOIN
+                    formas_pagamento AS fp ON pdv.forma_pagamento_id = fp.id_forma_pagamento
+                        INNER JOIN
+                    cartoes AS ct ON pdv.cartao_id = ct.id_cartao
+                WHERE
+                    dv.codigo_grupo_usuarios = ?
+                    AND (dv.`descricao` LIKE '%?%' OR dv.`observacao_estabelecimento` LIKE '%?%');";
         $conn = new Connect();
         $conn->getConnection();
         $pstm = $conn->execReader($query);
@@ -147,12 +177,60 @@ class Despesas_VariaveisDAO implements iDespesas_VariaveisDAO{
 
         $array = array();
         while($rs = $pstm->fetch_object()){
-            //$array[] = array($rs->id_despe)
+            $array[] = array($rs->id_despesa_variavel, $rs->mes_id, $rs->ano, $rs->categoria, $rs->estabelecimento, $rs->tipo_estabelecimento, $rs->observacao_estabelecimento, $rs->descricao, $rs->valor, $rs->data_utilizada, $rs->datetime_create, $rs->user_update, $rs->last_update, $rs->tipo_forma_pagamento, $rs->descricao_cartao, $rs->valor_pago, $rs->data_pagamento, $rs->user_update_pdv, $rs->last_update_pdv);
         }
+        return $array;
     }
 
     public function getRegister($codigo_grupo_usuarios){
+        $query = "SELECT 
+                    dv.id_despesa_variavel,
+                    dv.mes_id,
+                    dv.ano,
+                    c.categoria,
+                    e.estabelecimento,
+                    te.tipo_estabelecimento,
+                    dv.observacao_estabelecimento,
+                    dv.descricao,
+                    dv.valor,
+                    dv.data_utilizada,
+                    dv.datetime_create,
+                    dv.user_update,
+                    dv.last_update,
+                    fp.tipo as tipo_forma_pagamento,
+                    ct.descricao AS descricao_cartao,
+                    pdv.valor_pago,
+                    pdv.data_pagamento,
+                    pdv.user_update AS user_update_pdv,
+                    pdv.last_update AS last_update_pdv
+                FROM
+                    despesas_variaveis AS dv
+                        INNER JOIN
+                    categorias AS c ON dv.categoria_despesas_variaveis_id = c.id_categoria
+                        INNER JOIN
+                    estabelecimentos AS e ON dv.estabelecimento_id = e.id_estabelecimento
+                        INNER JOIN
+                    tipo_estabelecimentos AS te ON dv.tipo_estabelecimento_id = te.id_tipo_estabelecimento
+                        INNER JOIN
+                    pagamento_despesas_variaveis AS pdv ON dv.id_despesa_variavel = pdv.despesa_variavel_id
+                        INNER JOIN
+                    formas_pagamento AS fp ON pdv.forma_pagamento_id = fp.id_forma_pagamento
+                        INNER JOIN
+                    cartoes AS ct ON pdv.cartao_id = ct.id_cartao
+                WHERE
+                    dv.codigo_grupo_usuarios = ?
+                    AND 
+                    dv.data_utilizada >= SUBDATE(CURDATE(), 1);";
+        $conn = new Connect();
+        $conn->getConnection();
+        $pstm = $conn->execReader($query);
+        $pstm->bind_param("i", $codigo_grupo_usuarios);
 
+        $array = array();
+        while($rs = $pstm->fetch_object()){
+            $array[] = array($rs->id_despesa_variavel, $rs->mes_id, $rs->ano, $rs->categoria, $rs->estabelecimento, $rs->tipo_estabelecimento, $rs->observacao_estabelecimento, $rs->descricao, $rs->valor, $rs->data_utilizada, $rs->datetime_create, $rs->user_update, $rs->last_update, $rs->tipo_forma_pagamento, $rs->descricao_cartao, $rs->valor_pago, $rs->data_pagamento, $rs->user_update_pdv, $rs->last_update_pdv);
+        }
+        return $array;
     }
 
     public function getById($id_despesa_variavel){
@@ -167,7 +245,7 @@ class Despesas_VariaveisDAO implements iDespesas_VariaveisDAO{
                     dv.descricao,
                     dv.valor,
                     dv.data_utilizada,
-                    dv.datetime_cretate,
+                    dv.datetime_create,
                     dv.user_update,
                     dv.last_update,
                     pdv.forma_pagamento_id,
@@ -212,9 +290,8 @@ class Despesas_VariaveisDAO implements iDespesas_VariaveisDAO{
         $vo->getUser_update_pdv($rs->user_update_pdv);
         $vo->getLast_update_pdv($rs->last_update_pdv);
 
-        
-
-    }
+        return $vo;
+    }   
 
     public function getAll($codigo_grupo_usuarios, $mes_id, $ano){
         $query = "SELECT 
@@ -228,7 +305,7 @@ class Despesas_VariaveisDAO implements iDespesas_VariaveisDAO{
                     dv.descricao,
                     dv.valor,
                     dv.data_utilizada,
-                    dv.datetime_cretate,
+                    dv.datetime_create,
                     dv.user_update,
                     dv.last_update,
                     fp.tipo as tipo_forma_pagamento,
@@ -263,7 +340,7 @@ class Despesas_VariaveisDAO implements iDespesas_VariaveisDAO{
 
         $array = array();
         while($rs = $pstm->fetch_object()){
-            $array[] = array($rs->id_despesa_variavel, $rs->mes_id, $rs->ano, $rs->categoria, $rs->estabelecimento, $rs->tipo_estabelecimento, $rs->observacao_estabelecimento, $rs->descricao, "R$ ".number_format($rs->valor, 2, ',', '.'), (new DateTime($rs->data_utilizada))->format('d/m/Y'), (new DateTime($rs->datetime_cretate))->format('d/m/Y H:i:s'), $rs->user_update, (new DateTime($rs->last_update))->format('d/m/Y'), $rs->tipo_forma_pagamento, $rs->descricao_cartao, "R$ ".number_format($rs->valor_pago, 2, ',', '.'), (new DateTime($rs->data_pagamento))->format('d/m/Y'), $rs->user_update_pdv, (new DateTime($rs->last_update_pdv))->format('d/m/Y H:i:s'));
+            $array[] = array($rs->id_despesa_variavel, $rs->mes_id, $rs->ano, $rs->categoria, $rs->estabelecimento, $rs->tipo_estabelecimento, $rs->observacao_estabelecimento, $rs->descricao, "R$ ".number_format($rs->valor, 2, ',', '.'), (new DateTime($rs->data_utilizada))->format('d/m/Y'), (new DateTime($rs->datetime_create))->format('d/m/Y H:i:s'), $rs->user_update, (new DateTime($rs->last_update))->format('d/m/Y'), $rs->tipo_forma_pagamento, $rs->descricao_cartao, "R$ ".number_format($rs->valor_pago, 2, ',', '.'), (new DateTime($rs->data_pagamento))->format('d/m/Y'), $rs->user_update_pdv, (new DateTime($rs->last_update_pdv))->format('d/m/Y H:i:s'));
         }
         return $array;
     }
