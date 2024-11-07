@@ -1,5 +1,9 @@
 <?php
 session_start();
+
+include_once ("model/Connect.php");
+include_once ("model/Despesas_Variaveis/Despesas_VariaveisVO.php");
+include_once ("model/Despesas_Variaveis/Despesas_VariaveisDAO.php");
 class Despesas_VariaveisController{
 
     public function listar(){

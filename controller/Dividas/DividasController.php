@@ -119,8 +119,12 @@ class DividasController{
     }
 
     public function pesquisar(){
+        $_SESSION["user"] = "kaiuviny";
+        $_SESSION["cod_group_user"] = 1;
+        $_SESSION['page'] = 'Despesas_fixas';
+
         $model = new DividasModel();
-        $_SESSION['data'] = $model->searchModel($_GET['word']);
+        $_SESSION['data'] = $model->searchModel($_GET['word'], $_SESSION["cod_group_user"], $_GET['mes'], $_GET['ano']);
         include ("view/dividas/dividas.php");
     }
 
