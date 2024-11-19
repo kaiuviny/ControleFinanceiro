@@ -7,7 +7,19 @@ include_once("model/Dividas/DividasDAO.php");
 include_once("model/Dividas/DividasModel.php");
 
 class DividasController{
-    public function DividasController(){}
+    public function DividasController(){
+        $mes_id = $_GET['mes'];
+        $ano = $_GET['ano'];
+        
+        if (empty($mes_id)){
+            $mes_id = date("m");
+            $_SESSION['mes_id'] = $mes_id;
+        }
+        if(empty($ano)){
+            $ano = date("Y");
+            $_SESSION['ano'] = $ano;
+        }
+    }
 
     public function salvar(){
         $model = new DividasModel();
@@ -122,9 +134,11 @@ class DividasController{
         $_SESSION["user"] = "kaiuviny";
         $_SESSION["cod_group_user"] = 1;
         $_SESSION['page'] = 'Despesas_fixas';
+        $_SESSION['mes_id'] = isset($_GET['mes']) ? $_GET['mes'] : date("m");
+        $_SESSION['ano'] = isset($_GET['ano']) ? $_GET['ano'] : date("Y");
 
         $model = new DividasModel();
-        $_SESSION['data'] = $model->searchModel($_GET['word'], $_SESSION["cod_group_user"], $_GET['mes'], $_GET['ano']);
+        $_SESSION['data'] = $model->searchModel($_GET['word'], $_SESSION["cod_group_user"], $_SESSION['mes_id'], $_SESSION['ano']);
         include ("view/dividas/dividas.php");
     }
 
@@ -132,9 +146,11 @@ class DividasController{
         $_SESSION["user"] = "kaiuviny";
         $_SESSION["cod_group_user"] = 1;
         $_SESSION['page'] = 'Despesas_fixas';
+        $_SESSION['mes_id'] = isset($_GET['mes']) ? $_GET['mes'] : date("m");
+        $_SESSION['ano'] = isset($_GET['ano']) ? $_GET['ano'] : date("Y");
 
         $model = new DividasModel();
-        $_SESSION['data_dividas'] = $model->getAllModel($_SESSION["cod_group_user"], $_GET['mes'], $_GET['ano']);
+        $_SESSION['data_dividas'] = $model->getAllModel($_SESSION["cod_group_user"], $_SESSION['mes_id'], $_SESSION['ano']);
         include ("view/dividas/dividas.php");
     }
 }
