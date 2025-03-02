@@ -153,8 +153,6 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
         return $array;
     }
 
-
-
     public function getById($id_despesa_fixa)
     {
         $query = "SELECT

@@ -329,17 +329,17 @@ class Despesas_VariaveisDAO implements iDespesas_VariaveisDAO{
                         INNER JOIN
                     cartoes AS ct ON pdv.cartao_id = ct.id_cartao
                 WHERE
-                    dv.codigo_grupo_usuarios = ?
-                    AND dv.mes_id =?
-                    AND dv.ano = ?;";
+                    dv.codigo_grupo_usuarios = $codigo_grupo_usuarios
+                    AND dv.mes_id = $mes_id
+                    AND dv.ano = $ano;";
 
         $conn = new Connect();
         $conn->getConnection();
-        $pstm = $conn->execReader($query);
-        $pstm->bind_param("iii", $codigo_grupo_usuarios, $mes_id, $ano);
+        $result = $conn->execReader($query);
+        /*$pstm->bind_param("iii", $codigo_grupo_usuarios, $mes_id, $ano);*/
 
         $array = array();
-        while($rs = $pstm->fetch_object()){
+        while($rs = $result->fetch_object()){
             $array[] = array($rs->id_despesa_variavel, $rs->mes_id, $rs->ano, $rs->categoria, $rs->estabelecimento, $rs->tipo_estabelecimento, $rs->observacao_estabelecimento, $rs->descricao, "R$ ".number_format($rs->valor, 2, ',', '.'), (new DateTime($rs->data_utilizada))->format('d/m/Y'), (new DateTime($rs->datetime_create))->format('d/m/Y H:i:s'), $rs->user_update, (new DateTime($rs->last_update))->format('d/m/Y'), $rs->tipo_forma_pagamento, $rs->descricao_cartao, "R$ ".number_format($rs->valor_pago, 2, ',', '.'), (new DateTime($rs->data_pagamento))->format('d/m/Y'), $rs->user_update_pdv, (new DateTime($rs->last_update_pdv))->format('d/m/Y H:i:s'));
         }
         return $array;

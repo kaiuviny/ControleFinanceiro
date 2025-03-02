@@ -108,8 +108,11 @@ class Despesas_FixasController{
         $_SESSION["cod_group_user"] = 1;
         $_SESSION['mes_id'] = $_GET["mes"];
         $_SESSION['ano'] = $_GET['ano'];
+        $_SESSION['page'] = 'Despesas_Variaveis';
+
         $model = new Despesas_FixasModel();
-        $_SESSION["data_depesas_fixas"] = $model->getAllModel($_SESSION["cod_group_user"], $_GET["mes"], $_GET['ano']);
+        $_SESSION["data_depesas_fixas"] = $model->getAllModel(1, $_GET["mes"], $_GET['ano']);
+
         include("view/despesas_fixas/despesas_fixas.php");
     }
 }

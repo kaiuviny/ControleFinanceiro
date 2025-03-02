@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -67,8 +66,8 @@
 
                                     <nav>
                                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                            <a href="?Controller=<?=$_SESSION['page']?>&Action=listar&mes_id=1&ano= <?=$_GET['ano']?>"><button class="nav-link  <?php echo $_GET['mes_id'] == 1  ? "active" : ""; ?>" id="nav-Janeiro-tab"    data-bs-toggle="tab" data-bs-target="#nav-Janeiro"      type="button" role="tab" aria-controls="nav-Janeiro"    aria-selected="false" onclick="carregar_tabela(1, 1);">    Janeiro        </button></a>
-                                            <a href="?Controller=<?=$_SESSION['page']?>&Action=listar&mes_id=2&ano= <?=$_GET['ano']?>"><button class="nav-link  <?php echo $_GET['mes_id'] == 2  ? "active" : ""; ?>" id="nav-Fevereiro-tab"  data-bs-toggle="tab" data-bs-target="#nav-Fevereiro"    type="button" role="tab" aria-controls="nav-Fevereiro"  aria-selected="false" onclick="carregar_tabela(1, 2);">    Fevereiro       </button></a>
+                                            <a href="?Controller=<?=$_SESSION['page']?>&Action=listar&mes_id=1&ano=<?=$_GET['ano']?>"><button class="nav-link  active" id="nav-Janeiro-tab" data-bs-toggle="tab" data-bs-target="#nav-Janeiro"      type="button" role="tab" aria-controls="nav-Janeiro"    aria-selected="false" onclick="carregar_tabela(1, 1);">    Janeiro        </button></a>
+                                            <!--<a href="?Controller=<?=$_SESSION['page']?>&Action=listar&mes_id=2&ano=<?=$_GET['ano']?>"><button class="nav-link  <?php echo $_GET['mes_id'] == 2  ? "active" : ""; ?>" id="nav-Fevereiro-tab"  data-bs-toggle="tab" data-bs-target="#nav-Fevereiro"    type="button" role="tab" aria-controls="nav-Fevereiro"  aria-selected="false" onclick="carregar_tabela(1, 2);">    Fevereiro       </button></a>
                                             <a href="?Controller=<?=$_SESSION['page']?>&Action=listar&mes_id=3&ano= <?=$_GET['ano']?>"><button class="nav-link  <?php echo $_GET['mes_id'] == 3  ? "active" : ""; ?>" id="nav-Marco-tab"      data-bs-toggle="tab" data-bs-target="#nav-Marco"        type="button" role="tab" aria-controls="nav-Marco"      aria-selected="false" onclick="carregar_tabela(1, 3);">    Março           </button></a>
                                             <a href="?Controller=<?=$_SESSION['page']?>&Action=listar&mes_id=4&ano= <?=$_GET['ano']?>"><button class="nav-link  <?php echo $_GET['mes_id'] == 4  ? "active" : ""; ?>" id="nav-Abril-tab"      data-bs-toggle="tab" data-bs-target="#nav-Abril"        type="button" role="tab" aria-controls="nav-Abril"      aria-selected="false" onclick="carregar_tabela(1, 4);">    Abril           </button></a>
                                             <a href="?Controller=<?=$_SESSION['page']?>&Action=listar&mes_id=5&ano= <?=$_GET['ano']?>"><button class="nav-link  <?php echo $_GET['mes_id'] == 5  ? "active" : ""; ?>" id="nav-Maio-tab"       data-bs-toggle="tab" data-bs-target="#nav-Maio"         type="button" role="tab" aria-controls="nav-Maio"       aria-selected="true"  onclick="carregar_tabela(1, 5);">    Maio            </button></a>
@@ -79,11 +78,11 @@
                                             <a href="?Controller=<?=$_SESSION['page']?>&Action=listar&mes_id=10&ano=<?=$_GET['ano']?>"><button class="nav-link  <?php echo $_GET['mes_id'] == 10 ? "active" : ""; ?>" id="nav-Outubro-tab"    data-bs-toggle="tab" data-bs-target="#nav-Outubro"      type="button" role="tab" aria-controls="nav-Outubro"    aria-selected="false" onclick="carregar_tabela(1, 10);">   Outubro         </button></a>
                                             <a href="?Controller=<?=$_SESSION['page']?>&Action=listar&mes_id=11&ano=<?=$_GET['ano']?>"><button class="nav-link  <?php echo $_GET['mes_id'] == 11 ? "active" : ""; ?>" id="nav-Novembro-tab"   data-bs-toggle="tab" data-bs-target="#nav-Novembro"     type="button" role="tab" aria-controls="nav-Novembro"   aria-selected="false" onclick="carregar_tabela(1, 11);">   Novembro        </button></a>
                                             <a href="?Controller=<?=$_SESSION['page']?>&Action=listar&mes_id=12&ano=<?=$_GET['ano']?>"><button class="nav-link  <?php echo $_GET['mes_id'] == 12 ? "active" : ""; ?>" id="nav-Dezembro-tab"   data-bs-toggle="tab" data-bs-target="#nav-Dezembro"     type="button" role="tab" aria-controls="nav-Dezembro"   aria-selected="false" onclick="carregar_tabela(1, 12);">   Dezembro        </button></a>
-                                            <a href="?Controller=<?=$_SESSION['page']?>&Action=novo"><button class="btn btn-primary" id="btnNovaDespesa">Nova Despesa</button></a>
+                                        --><a href="?Controller=<?=$_SESSION['page']?>&Action=novo"><button class="btn btn-primary" id="btnNovaDespesa">Nova Despesa</button></a>
                                         </div>
                                     </nav>
                                 </div>
-                                <div class="card-body">
+                                <!--<div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
@@ -137,7 +136,7 @@
                                             </tbody>
                                         </table>    
                                     </div>        
-                                </div>
+                                </div>-->
                                 <hr />
                                 <div class="card-body">
                                     <a href="?Controller=Despesas_Variaveis&Action=novo"><button class="btn btn-primary" id="btnNovaDespesa">Nova Despesa</button></a>
