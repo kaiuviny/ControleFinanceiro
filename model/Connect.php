@@ -3,7 +3,7 @@ class Connect{
     private $conn;
 
     public function getConnection(){
-        $this->conn = new mysqli("127.0.0.1", "root", "", "ControleFinanceiro", "3306");
+        $this->conn = new mysqli("127.0.0.1", "root", "", "controlefinanceiro", "3306");
         if($this->conn->connect_error){
             die("Connection failed: " . $this->conn->connect_error);
         }
