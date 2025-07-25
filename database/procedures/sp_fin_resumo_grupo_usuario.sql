@@ -160,7 +160,7 @@ BEGIN
         FROM    gen_parcelas gp
         WHERE   gp.num_parcela < LEAST(gp.numero_parcelas, gp.meses_ate_hoje)
     )
-    SELECT  IFNULL(SUM(gp.valor_parcela),0)
+    SELECT  IFNULL(SUM(gp.valor_parcela),0.00)
       INTO  @tot_dividas_np_vencidas
     FROM    gen_parcelas gp
     LEFT   JOIN pagamento_dividas pd
@@ -171,18 +171,19 @@ BEGIN
 
     /* -------- Bloco 3 –‑ resultado final -------------------------------- */
     SELECT
-        @tot_divida_valor_total      AS TOTAL_DIVIDA_VALOR_TOTAL,
-        @tot_dividas_nao_pagas_mes   AS TOTAL_DIVIDAS_NAO_PAGAS_MES,
-        @tot_dividas_np_vencidas     AS TOTAL_DIVIDAS_NAO_PAGAS_VENCIDAS,
-        @tot_desp_fixas_mes          AS TOTAL_DESPESA_FIXAS_DO_MES,
-        @tot_desp_fixas_pagas        AS TOTAL_DESPESAS_FIXAS_PAGAS,
-        @tot_desp_fixas_np_mes       AS TOTAL_DESPESAS_FIXAS_NAO_PAGAS_ESTE_MES,
-        @tot_desp_fixas_np_vencidas  AS TOTAL_DESPESAS_FIXAS_NAO_PAGAS_VENCIDAS_ESTE_MES,
-        @tot_dividas_pagas           AS TOTAL_DIVIDA_PAGAS,
-        @tot_dividas_np_mes          AS TOTAL_DIVIDA_NAO_PAGAS_SOMENTE_ESTE_MES,
-        @tot_desp_var_mes            AS TOTAL_DESPESAS_VARIAVEIS_MES,
-        @tot_receb_bruto_mes         AS TOTAL_RECEBIMENTOS_BRUTO_MES,
-        @tot_desp_var_pagas          AS TOTAL_DESPESAS_VARIAVEIS_PAGAS,
-        @tot_receb_liq_mes           AS TOTAL_RECEBIMENTOS_LIQUIDOS;
+    CONCAT('R$ ', REPLACE(REPLACE(FORMAT(IFNULL(@tot_divida_valor_total, 0), 2), ',', '#'), '.', ','), '#', '.') AS TOTAL_DIVIDA_VALOR_TOTAL,
+    CONCAT('R$ ', REPLACE(REPLACE(FORMAT(IFNULL(@tot_dividas_nao_pagas_mes  , 0), 2), ',', '#'), '.', ','), '#', '.') AS TOTAL_DIVIDAS_NAO_PAGAS_MES,
+    CONCAT('R$ ', REPLACE(REPLACE(FORMAT(IFNULL(@tot_dividas_np_vencidas    , 0), 2), ',', '#'), '.', ','), '#', '.') AS TOTAL_DIVIDAS_NAO_PAGAS_VENCIDAS,
+    CONCAT('R$ ', REPLACE(REPLACE(FORMAT(IFNULL(@tot_desp_fixas_mes         , 0), 2), ',', '#'), '.', ','), '#', '.') AS TOTAL_DESPESA_FIXAS_DO_MES,
+    CONCAT('R$ ', REPLACE(REPLACE(FORMAT(IFNULL(@tot_desp_fixas_pagas       , 0), 2), ',', '#'), '.', ','), '#', '.') AS TOTAL_DESPESAS_FIXAS_PAGAS,
+    CONCAT('R$ ', REPLACE(REPLACE(FORMAT(IFNULL(@tot_desp_fixas_np_mes      , 0), 2), ',', '#'), '.', ','), '#', '.') AS TOTAL_DESPESAS_FIXAS_NAO_PAGAS_ESTE_MES,
+    CONCAT('R$ ', REPLACE(REPLACE(FORMAT(IFNULL(@tot_desp_fixas_np_vencidas , 0), 2), ',', '#'), '.', ','), '#', '.') AS TOTAL_DESPESAS_FIXAS_NAO_PAGAS_VENCIDAS_ESTE_MES,
+    CONCAT('R$ ', REPLACE(REPLACE(FORMAT(IFNULL(@tot_dividas_pagas          , 0), 2), ',', '#'), '.', ','), '#', '.') AS TOTAL_DIVIDA_PAGAS,
+    CONCAT('R$ ', REPLACE(REPLACE(FORMAT(IFNULL(@tot_dividas_np_mes         , 0), 2), ',', '#'), '.', ','), '#', '.') AS TOTAL_DIVIDA_NAO_PAGAS_SOMENTE_ESTE_MES,
+    CONCAT('R$ ', REPLACE(REPLACE(FORMAT(IFNULL(@tot_desp_var_mes           , 0), 2), ',', '#'), '.', ','), '#', '.') AS TOTAL_DESPESAS_VARIAVEIS_MES,
+    CONCAT('R$ ', REPLACE(REPLACE(FORMAT(IFNULL(@tot_receb_bruto_mes        , 0), 2), ',', '#'), '.', ','), '#', '.') AS TOTAL_RECEBIMENTOS_BRUTO_MES,
+    CONCAT('R$ ', REPLACE(REPLACE(FORMAT(IFNULL(@tot_desp_var_pagas         , 0), 2), ',', '#'), '.', ','), '#', '.') AS TOTAL_DESPESAS_VARIAVEIS_PAGAS,
+    CONCAT('R$ ', REPLACE(REPLACE(FORMAT(IFNULL(@tot_receb_liq_mes          , 0), 2), ',', '#'), '.', ','), '#', '.') AS TOTAL_RECEBIMENTOS_LIQUIDOS;
+
 END$$
 DELIMITER ;
