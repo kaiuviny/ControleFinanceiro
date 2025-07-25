@@ -1002,6 +1002,8 @@
                url: "controller/Dashboard/dashboard_mensal.php",
                success: function(data){
                 console.log("Data: " + data);
+                alert(data);
+                // Aqui eu converto a string JSON em um objeto JavaScript
                 let myArr = JSON.parse(data);
                 // ------Primeira Linha do DashBoard------- \\
                 $('#divDividasTotais').html('<p>R$<br />' + myArr.TOTAL_DIVIDA_VALOR_TOTAL + '<small>(Total)</small></p> <p style="color: orange">R$ '+ myArr.TOTAL_DIVIDAS_NAO_PAGAS_MES + '<small>(Parcelas)</small></p> <p style="color: red">R$ ' + myArr.TOTAL_DIVIDAS_NAO_PAGAS_VENCIDAS + '<small>(Atrasadas)</small></p>')
