@@ -26,5 +26,3 @@ while($db->more_results() && $db->next_result()) {
 $stmt->close();
 //}
 ?>
-
-<!DOCTYPE 
