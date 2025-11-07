@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="PT-BR">
 
 <head>
 
@@ -21,9 +21,9 @@
     <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
-
-<body id="page-top" onload="request_values();">
-
+<!-- CHAMADA DA FUNCTION COM JAVASCRIP PURO-->
+<!--<body id="page-top" onload="request_values();">-->
+<body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -994,6 +994,9 @@
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
 
+    <!-- Certifique-se de ter o jQuery incluído -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
         function request_values(){
             $.ajax({
@@ -1001,30 +1004,29 @@
                data: {action:"action"},
                url: "controller/Dashboard/dashboard_mensal.php",
                success: function(data){
-                console.log("Data: " + data);
-                alert(data);
-                // Aqui eu converto a string JSON em um objeto JavaScript
-                let myArr = JSON.parse(data);
+                console.log("Dados recebidos: ", data); // Dados no console
+          
                 // ------Primeira Linha do DashBoard------- \\
-                $('#divDividasTotais').html('<p>R$<br />' + myArr.TOTAL_DIVIDA_VALOR_TOTAL + '<small>(Total)</small></p> <p style="color: orange">R$ '+ myArr.TOTAL_DIVIDAS_NAO_PAGAS_MES + '<small>(Parcelas)</small></p> <p style="color: red">R$ ' + myArr.TOTAL_DIVIDAS_NAO_PAGAS_VENCIDAS + '<small>(Atrasadas)</small></p>')
+                $('#divDividasTotais').html('<p>' + data.TOTAL_DIVIDA_VALOR_TOTAL + '<small>(Total)</small></p> <p style="color: orange">R$ ' + data.TOTAL_DIVIDAS_NAO_PAGAS_MES + '<small>(Parcelas)</small></p> <p style="color: red">R$ ' + data.TOTAL_DIVIDAS_NAO_PAGAS_VENCIDAS + '<small>(Atrasadas)</small></p>')
                 $('#divDespesasFixasTotais').html('<br/><p>R$<br />' + myArr.TOTAL_DESPESA_FIXAS_DO_MES + '<small>(Total)</small></p> <p style="color: orange">R$ ' + myArr.TOTAL_DESPESAS_FIXAS_NAO_PAGAS_ESTE_MES + '<small>(Devidas)</small></p> <p style="color: red">R$ '+ myArr.TOTAL_DESPESAS_FIXAS_NAO_PAGAS_VENCIDAS_ESTE_MES + '<small>(Vencidas)</small></p>')
-                $('#divDespesasVariaveisTotais').html('R$ ' + myArr.TOTAL_DESPESAS_VARIAVEIS_MES)
-                $('#divRecebimentosBrutoTotais').html('R$ ' + myArr.TOTAL_RECEBIMENTOS_BRUTO_MES)
+                $('#divDespesasVariaveisTotais').html('R$ ' + data.TOTAL_DESPESAS_VARIAVEIS_MES)
+                $('#divRecebimentosBrutoTotais').html('R$ ' + data.TOTAL_RECEBIMENTOS_BRUTO_MES)
                 // ------Segunda Linha do DashBoard------- \\
-                $('#divDividasPagas').html('R$ ' + myArr.TOTAL_DIVIDA_PAGAS)
-                $('#divDespesasFixasPagas').html('R$ ' + myArr.TOTAL_DESPESAS_FIXAS_PAGAS)
-                $('#divDespesasVariaveisPagas').html('R$ ' + myArr.TOTAL_DESPESAS_VARIAVEIS_PAGAS)
-                $('#divRecebimentosLiquidoTotais').html('R$ ' + myArr.TOTAL_RECEBIMENTOS_LIQUIDOS)
+                $('#divDividasPagas').html('R$ ' + data.TOTAL_DIVIDA_PAGAS)
+                $('#divDespesasFixasPagas').html('R$ ' + data.TOTAL_DESPESAS_FIXAS_PAGAS)
+                $('#divDespesasVariaveisPagas').html('R$ ' + data.TOTAL_DESPESAS_VARIAVEIS_PAGAS)
+                $('#divRecebimentosLiquidoTotais').html('R$ ' + data.TOTAL_RECEBIMENTOS_LIQUIDOS)
                 // ------Terceira Linha do DashBoard------- \\
-                let DESPESAS_TOTAIS = Number(myArr.TOTAL_DIVIDA_DO_MES) + Number(myArr.TOTAL_DESPESA_FIXAS_DO_MES)
+                let DESPESAS_TOTAIS = Number(data.TOTAL_DIVIDA_DO_MES) + Number(data.TOTAL_DESPESA_FIXAS_DO_MES)
                 $('#divDespesasTotais').html('R$ ' + DESPESAS_TOTAIS)
-
-
-                
-  
                } 
             });
         }
+
+        // Chamada automática (ou chame via botão)
+       $(document).ready(function(){
+            request_values();
+        });
     </script>
 
 </body>

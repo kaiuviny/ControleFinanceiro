@@ -200,7 +200,7 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
                     `df`.`id_despesa_fixa`,
                     `df`.`descricao`,
                     `c`.`categoria`,
-                    `df`.`data_cadastro`,
+                    `df`.`datetime_cretate` AS `data_cadastro`,
                     `df`.`valor`,
                     CASE
                         WHEN
@@ -223,7 +223,7 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
                         INNER JOIN
                     `categorias` AS `c` ON `df`.`categoria_despesas_fixas_id` = `c`.`id_categoria`
                 WHERE
-                    `df`.`data_cadastro` <= DATE(CONCAT($ano, '-', $mes_id, '-', 31))
+                    `df`.`datetime_cretate` <= DATE(CONCAT($ano, '-', $mes_id, '-', 31))
                         AND `df`.`active` = 'Y'
                         AND `df`.`codigo_grupo_usuarios` = " . addslashes($codigo_grupo_usuarios);
 
