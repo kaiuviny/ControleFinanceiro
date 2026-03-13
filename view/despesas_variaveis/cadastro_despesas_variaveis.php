@@ -3,21 +3,15 @@
 $dayMoth = date("m");
 //conexao
 $link = mysqli_connect("127.0.0.1", "root", "", "ControleFinanceiro", "3306");
-//Categoria
-$queryCategoria = "SELECT 
-                `id_categoria`, `categoria`
-            FROM
-               `categorias`
-            WHERE
-                `tipo_despesas` = 'V'
-                 AND `active` = 'Y';";
-$resultCategoria = mysqli_query($link, $queryCategoria);
-//traz o mes recorrente
-$queryMesCorrente = "SELECT `mes` FROM `mes` WHERE `id_mes` = " . $dayMoth;
-$resultMesCorrente = mysqli_query($link, $queryMesCorrente);
-//traz todos os meses
-$queryMes = "SELECT `id_mes`, `mes` FROM `mes`;";
-$resultMes = mysqli_query($link, $queryMes);
+//Queries para popular os selects
+$resultCategoria            = mysqli_query($link, "SELECT `id_categoria`, `categoria`                       FROM `categorias`               WHERE `active` = 'Y' AND`tipo_despesas` = 'V';");
+$resultEstabelecimento      = mysqli_query($link, "SELECT `id_estabelecimento`, `estabelecimento`           FROM `estabelecimentos`         WHERE `active` = 'Y';");
+$resultTipoEstabelecimento  = mysqli_query($link, "SELECT `id_tipo_estabelecimento`, `tipo_estabelecimento` FROM `tipo_estabelecimentos`    WHERE `active` = 'Y';");
+$resultFormaPagamento       = mysqli_query($link, "SELECT `id_forma_pagamento`, `forma_pagamento`           FROM `formas_pagamento`         WHERE `active` = 'Y';");
+$resultCartao               = mysqli_query($link, "SELECT `id_cartao`, `descricao`                          FROM `cartoes`                  WHERE `active` = 'Y';");
+//Queries para popular os meses no select
+$resultMesCorrente          = mysqli_query($link, "SELECT `mes`                                             FROM `meses` WHERE `id_mes` = " . $dayMoth);
+$resultMes                  = mysqli_query($link, "SELECT `id_mes`, `mes`                                   FROM `meses`;");
 
             ?>
 <!DOCTYPE html>
@@ -80,51 +74,96 @@ $resultMes = mysqli_query($link, $queryMes);
                                                 <h6 class="m-0 font-weight-bold text-primary">Preencha todos os campos (*) do formulário</h6>
                                             </div>
                                             <div class="card-body">
-                                                <form class="row" name="frmLogin" id="frmLogin" method="post" action="?Controller=Despesas_Variaveis&Action=salvar">
-                                                        <input type="hidden" id="slcStatus" name="slcStatus" value="A pagar" />
-                                                        <div class="col-md-2">
-                                                            <label class="label form-label" for="slcCategoria" id="lblCategoria">Categoria:</label>
-                                                            <select class="form-control" id="slcCategoria" name="slcCategoria" required>
-                                                                <option value="">--Selecione uma categoria--</option>
-                                                                <?php
-                                                                while($rsCategoria = mysqli_fetch_object($resultCategoria)){
-                                                                    echo"<option value='".$rsCategoria->id_categoria."'>".$rsCategoria->categoria."</option>";
-                                                                }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-1">
-                                                            <label class="label form-label" for="slcMes" id="lblMes">Mês:</label>
-                                                            <select class="form-control" id="slcMes" name="slcMes" required>
-                                                                <?php
+                                                <form class="row" name="frmLogin" id="frmLogin" method="post" action="?Controller=Despesas_Variaveis&Action=salvar">     
+                                                    <input type="hidden" id="slcStatus" name="slcStatus" value="A pagar" />
+                                                    <div class="offset-md-2 col-md-2">
+                                                        <label class="label form-label" for="txtDataUtilizada" id="lblDataUtilizada">Data Utilizada:</label>
+                                                        <input class="form-control" id="txtDataUtilizada" name="txtDataUtilizada" type="date" value="<?=date('Y-m-d')?>" required />
+                                                    </div>
+                                                    <!-- depois dos testes deixar hidden -->
+                                                    <!--<div class="col-md-1">
+                                                        <label class="label form-label" for="slcMes" id="lblMes">Mês:</label>
+                                                        <select class="form-control" id="slcMes" name="slcMes" required>
+                                                            <?php
                                                                 $rsMesCorrente = mysqli_fetch_object($resultMesCorrente);
                                                                 echo"<option value='".$dayMoth."'>".$rsMesCorrente->mes."</option>";
                                                                 while($rsMes = mysqli_fetch_object($resultMes)){
                                                                     echo"<option value='".$rsMes->id_mes."'>".$rsMes->mes."</option>";
                                                                 }
-                                                                ?>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-1">
-                                                            <label class="label form-label" for="txtAno" id="lblAno">Ano:</label>
-                                                            <input class="form-control" id="txtAno" name="txtAno" type="number" value="2024" min="2020" max="2030"  required />
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label class="label form-label" for="txtDescricao" id="lblDescricao">Descrição:</label>
-                                                            <input class="form-control" id="txtDescricao" name="txtDescricao" placeholder="Descreva a despesa fixa..." required />
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <label class="label form-label" for="txtVencimento" id="lblVencimento">Vencimento:</label>
-                                                            <input class="form-control" id="txtVencimento" name="txtVencimento" type="date" value="<?=date('Y-m-d')?>" required />
-                                                        </div>
-                                                        <div class="col-md-1">
-                                                            <label class="label form-label" for="txtValor" id="lblValor">Valor:</label>
-                                                            <input class="form-control" id="txtValor" name="txtValor" type="number" min="1" max="99999" step="any" value="100.00" required/>    
-                                                        </div>
-                                                        <div class="col-md-1">
-                                                            <label class="label form-label" for="btnRegistrar" id="lblBtnRegistrar">Ações</label>
-                                                            <input type="submit" id="btnRegistrar" name="btnRegistrar" value="Registrar" class="btn btn-success" class="form form-control"/>
-                                                        </div>
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                        <label class="label form-label" for="txtAno" id="lblAno">Ano:</label>
+                                                        <input class="form-control" id="txtAno" name="txtAno" type="number" value="<?=date('Y')?>" min="2020" max="2030"  required />
+                                                    </div>-->
+                                                    <div class="col-md-4">
+                                                        <label class="label form-label" for="slcCategoria" id="lblCategoria">Categoria:</label>
+                                                        <select class="form-control" id="slcCategoria" name="slcCategoria" required>
+                                                            <option value="">--Selecione uma categoria--</option>
+                                                            <?php
+                                                                while($rsCategoria = mysqli_fetch_object($resultCategoria)){
+                                                                    echo"<option value='".$rsCategoria->id_categoria."'>".$rsCategoria->categoria."</option>";
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2 ">
+                                                        <label class="label form-label" for="txtValor" id="lblValor">Valor:</label>
+                                                        <input class="form-control" id="txtValor" name="txtValor" type="number" min="1" max="99999" step="any" value="100.00" required/>    
+                                                    </div>    
+                                                    <div class="offset-md-2 col-md-2">
+                                                        <label class="label form-label" for="slcTipoEstabelecimento" id="lblTipoEstabelecimento">Tipo Estabelecimento:</label>
+                                                        <select class="form-control" id="slcTipoEstabelecimento" name="slcTipoEstabelecimento" required>
+                                                            <option value="">--Selecione um Tipo de Estabelecimento--</option>
+                                                            <?php
+                                                                while($rsTipoEstabelecimento = mysqli_fetch_object($resultTipoEstabelecimento)){
+                                                                    echo"<option value='".$rsTipoEstabelecimento->id_tipo_estabelecimento."'>".$rsTipoEstabelecimento->tipo_estabelecimento."</option>";
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="label form-label" for="slcEstabelecimento" id="lblEstabelecimento">Estabelecimento:</label>
+                                                        <select class="form-control" id="slcEstabelecimento" name="slcEstabelecimento" required>
+                                                            <option value="">--Selecione um estabelecimento--</option>
+                                                            <?php
+                                                                while($rsEstabelecimento = mysqli_fetch_object($resultEstabelecimento)){
+                                                                    echo"<option value='".$rsEstabelecimento->id_estabelecimento."'>".$rsEstabelecimento->estabelecimento."</option>";
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="offset-md-3 col-md-4">
+                                                        <label class="label form-label" for="slcFormaPagamento" id="lblFormaPagamento">Forma de Pagamento:</label>
+                                                        <select class="form-control" id="slcFormaPagamento" name="slcFormaPagamento" required>
+                                                            <option value="">--Selecione uma Forma de Pagamento--</option>
+                                                            <?php
+                                                                while($rsFormaPagamento = mysqli_fetch_object($resultFormaPagamento)){
+                                                                    echo"<option value='".$rsFormaPagamento->id_forma_pagamento."'>".$rsFormaPagamento->forma_pagamento."</option>";
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="label form-label" for="slcCartao" id="lblCartao">Cartao:</label>
+                                                        <select class="form-control" id="slcCartao" name="slcCartao" required>
+                                                            <option value="">--Selecione um Cartao--</option>
+                                                            <?php
+                                                                while($rsCartao = mysqli_fetch_object($resultCartao)){
+                                                                    echo"<option value='".$rsCartao->id_cartao."'>".$rsCartao->descricao."</option>";
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label class="label form-label" for="txtDescricao" id="lblDescricao">Descrição Opcional:</label>
+                                                        <input class="form-control" id="txtDescricao" name="txtDescricao" placeholder="Descreva a despesa fixa..." required />
+                                                    </div>
+                                                    <br />
+                                                    <div class="container text-center mt-4">
+                                                        <button class="btn btn-success" type="submit" id="btnSalvarDespesaVariavel" name="btnSalvarDespesaVariavel">Salvar Despesa Variável</button>
+                                                    </div>
                                                 </form>
                                                 <br />
                                             </div>
@@ -137,7 +176,7 @@ $resultMes = mysqli_query($link, $queryMes);
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Despesas Variáveis Cadastradas</h6>
-                                </div>
+                                </div>367
                                 <div class="card-body">
                                     <div class="table-responsive">
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

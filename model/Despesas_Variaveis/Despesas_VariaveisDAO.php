@@ -3,6 +3,46 @@ include "iDespesas_VariaveisDAO.php";
 class Despesas_VariaveisDAO implements iDespesas_VariaveisDAO{
 
     public function insert(Despesas_VariaveisVO $value){
+
+        echo "<h1>cod_user: " . $value->getCodigo_grupo_usuarios() . "<br />".
+             "txtDescricao: ". $value->getDescricao() . "<br />" . 
+             "slcTipoEstabelecimento: " . $value->getTipo_estabelecimento_id() . "<br />".
+             "slcEstabelecimento: " . $value->getEstabelecimento_id() . "<br />".
+             "txtValor: " . $value->getValor() . "<br />".
+             "slcCategoria: " . $value->getCategoria_despesas_variaveis_id() . "<br />".
+             "txtDataUtilizada: " . $value->getData_utilizada() . "<br />".
+             "txtDiaUtilizada: " . $value->getDia() . "<br />".
+             "txtMesIDUtilizada: " . $value->getMes_id() . "<br />".
+             "txtAnoUtilizada: " . $value->getAno() . "<br />".
+             "user: " . $value->getUser_update() . "</h1>";
+
+        $mes_id                             = $value->getMes_id();
+        $ano                                = $value->getAno();
+        $categoria_despesas_variaveis_id    = $value->getCategoria_despesas_variaveis_id();
+        $codigo_grupo_usuarios              = $value->getCodigo_grupo_usuarios();
+        $estabelecimento_id                 = $value->getEstabelecimento_id();
+        $tipo_estabelecimento_id            = $value->getTipo_estabelecimento_id();
+        $observacao_estabelecimento         = $value->getDescricao();
+        $descricao                          = $value->getDescricao();
+        $valor                              = $value->getValor();
+        $data_utilizada                     = $value->getData_utilizada();
+        $user_update                        = $value->getUser_update();
+       /* echo "<p>INSERT INTO
+                  `despesas_variaveis`
+                   (`mes_id`,
+                     `ano`,
+                      `categoria_despesas_variaveis_id`,
+                       `codigo_grupo_usuarios`,
+                        `estabelecimento_id`,
+                         `tipo_estabelecimento_id`,
+                          `observacao_estabelecimento`,
+                           `descricao`,
+                            `valor`,
+                             `data_utilizada`,
+                              `user_update`)
+                   VALUES
+                    ($mes_id, $ano, $categoria_despesas_variaveis_id, $codigo_grupo_usuarios, $estabelecimento_id, $tipo_estabelecimento_id,'".$observacao_estabelecimento."', '".$descricao."', '".$valor."', '".$data_utilizada."', '".$user_update."');</p>";
+        return true;*/
         $query = "INSERT INTO
                   `despesas_variaveis`
                    (`mes_id`,
@@ -17,19 +57,7 @@ class Despesas_VariaveisDAO implements iDespesas_VariaveisDAO{
                              `data_utilizada`,
                               `user_update`)
                    VALUES
-                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        
-        $mes_id                             = $value->getMes_id();
-        $ano                                = $value->getAno();
-        $categoria_despesas_variaveis_id    = $value->getCategoria_despesas_variaveis_id();
-        $codigo_grupo_usuarios              = $value->getCodigo_grupo_usuarios();
-        $estabelecimento_id                 = $value->getEstabelecimento_id();
-        $tipo_estabelecimento_id            = $value->getTipo_estabelecimento_id();
-        $observacao_estabelecimento         = $value->getObservacao_estabalecimento();
-        $descricao                          = $value->getDescricao();
-        $valor                              = $value->getValor();
-        $data_utilizada                     = $value->getData_utilizada();
-        $user_update                        = $value->getUser_update();
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
         $conn = new Connect();
         $conn->getConnection();
@@ -40,9 +68,9 @@ class Despesas_VariaveisDAO implements iDespesas_VariaveisDAO{
             $ultID = $pstm->insert_id;
             $forma_pagamento_id = $value->getForma_pagamento_id();
             $cartao_id = $value->getCartao_id();
-            $query = "INSERT INTO `controlefinanceiro`.`pagamento_despesas_variaveis` (`despesa_variavel_id`, `forma_pagamento_id`, `cartao_id`, `valor_pago`, `user_update`) VALUES (?, ?, ?, ?, ?, ?);";
+            $query = "INSERT INTO `pagamento_despesas_variaveis` (`despesa_variavel_id`, `forma_pagamento_id`, `cartao_id`, `valor_pago`, `data_pagamento`, `user_update`) VALUES (?, ?, ?, ?, ?, ?);";
             $pstm = $conn->execSql($query);
-            $pstm->bind_param("iiiss", $ultID, $forma_pagamento_id, $cartao_id, $valor, $user_update);
+            $pstm->bind_param("iiisss", $ultID, $forma_pagamento_id, $cartao_id, $valor, $data_utilizada, $user_update);
             if($pstm->execute())
                 return true;
             else
@@ -147,7 +175,7 @@ class Despesas_VariaveisDAO implements iDespesas_VariaveisDAO{
                     dv.datetime_create,
                     dv.user_update,
                     dv.last_update,
-                    fp.tipo as tipo_forma_pagamento,
+                    fp.forma_pagamento as forma_pagamento,
                     ct.descricao AS descricao_cartao,
                     pdv.valor_pago,
                     pdv.data_pagamento,

@@ -24,9 +24,11 @@ class Despesas_FixasController{
         $vo->setUser_update($_SESSION["user"]);
         
         if($model->insertModel($vo)){
+            $_SESSION["cod_msg"] = 1;
             $_SESSION["msg"] = "Despesa fixa " . $vo->getDescricao() . " cadastrada com sucesso!";
         }
         else{
+            $_SESSION["cod_msg"] = 0;
             $_SESSION["msg"] = "OPS! Ocorreu um erro ao cadastrar uma despesa fixa.";
         }
 
@@ -50,13 +52,40 @@ class Despesas_FixasController{
         $vo->setId_despesa_fixa($_POST["txtId_despesa_fixa"]);
 
         if($model->updateModel($vo)){
+            $_SESSION["cod_msg"] = 1;
             $_SESSION["msg"] = "Despesas Fixa atualizada com sucesso!";
         }
         else{
+            $_SESSION["cod_msg"] = 0;
             $_SESSION["msg"] = "OPS! Ocorreu um erro ao atualizar a despesa fixa.";
         }
 
-        include ("view/despesas_fixas/despesas_fixas.php");
+        //include ("view/despesas_fixas/despesas_fixas.php");
+        header("Location: ?Controller=Despesas_Fixas&Action=listar&mes_id=".$vo->getMes_id()."&ano=".$vo->getAno());
+    }
+    public function atualizarPagamento(){
+        $model = new Despesas_FixasModel();
+        $vo = new Despesas_FixasVO();
+
+        $vo->setId_despesa_fixa($_GET["despesa_fixa_id"]);
+        $vo->setDescricao($_GET["descricao"]);
+        $vo->setMes_id($_GET["mes_id"]);
+        $vo->setAno($_GET["ano"]);
+        $vo->setValor($_GET["valor_pago"]);
+        $vo->setUser_update($_GET["user_update"]);
+        
+
+        if($model->updatePaymentModel($vo)){
+            $_SESSION["cod_msg"] = 1;
+            $_SESSION["msg"] = "Despesas Fixa [".$vo->getId_despesa_fixa()."] ".$vo->getDescricao()." atualizado como PAGA com sucesso!";
+        }
+        else{
+            $_SESSION["cod_msg"] = 0;
+            $_SESSION["msg"] = "OPS! Ocorreu um erro ao atualizar o pagamento da despesa fixa (".$vo->getId_despesa_fixa().") ".$vo->getDescricao().". \n\nPor favor tente novamente!.";
+        }
+
+        //include ("view/despesas_fixas/despesas_fixas.php");
+        header("Location: ?Controller=Despesas_Fixas&Action=listar&mes_id=".$vo->getMes_id()."&ano=".$vo->getAno());
     }
 
     public function deletar(){
@@ -65,13 +94,14 @@ class Despesas_FixasController{
   
         $vo = $model->getByIdModel($_GET["id"]);
         if($model->deleteModel($vo)){
-            $_SESSION["msg"] = "Despesa Fixa n. " ; $_GET['id'] . " removida com sucesso! ";
-            header("Location: ?Controller=Despesas_Fixas&Action=listar");
+            $_SESSION["cod_msg"] = 1;
+            $_SESSION["msg"] = "Despesa Fixa n. " ; $_GET['id'] . " removida com sucesso! "; 
         }
         else{
+            $_SESSION["cod_msg"] = 0;
             $_SESSION["msg"] = "Despesa Fixa n. " ; $_GET['id'] . " removida com sucesso! ";
-            header("Location: ?Controller=Despesas_Fixas&Action=listar");
         }
+        header("Location: ?Controller=Despesas_Fixas&Action=listar");
     }
 
     public function novo(){
@@ -100,10 +130,21 @@ class Despesas_FixasController{
     }
 
     public function listarRegistro(){
-
     }
 
     public function listar(){
+        if (empty($_GET["mes_id"])){
+            $_GET["mes_id"] = date("m");
+            $_SESSION['mes_id'] = $_GET["mes_id"];
+        }
+        if(empty($_GET['ano'])){
+            $_GET['ano'] = date("Y");
+            $_SESSION['ano'] = $_GET['ano'];
+        }
+        if(empty($_SESSION['msg'])){
+            $_SESSION["cod_msg"] = 0;
+            $_SESSION['msg']="";
+        }
         $_SESSION["user"] = "kaiuviny";
         $_SESSION["cod_group_user"] = 1;
         $_SESSION['mes_id'] = $_GET["mes_id"];
@@ -115,5 +156,6 @@ class Despesas_FixasController{
 
         include("view/despesas_fixas/despesas_fixas.php");
     }
+
 }
 ?>

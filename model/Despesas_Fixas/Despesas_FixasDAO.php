@@ -82,6 +82,28 @@ class Despesas_FixasDAO implements iDespesas_FixasDAO{
             return false;
     }
 
+    public function updatePayment(Despesas_FixasVO $value){
+        $query = "INSERT INTO `controlefinanceiro`.`pagamento_despesas_fixas` (`despesa_fixa_id`, `mes_id`, `ano`, `valor_pago`, `user_update`) VALUES (?, ?, ?, ?, ?);";
+
+        $despesa_fixa_id = $value->getId_despesa_fixa();
+        $mes_id = $value->getMes_id();
+        $ano = $value->getAno();
+        $valor_pago = $value->getValor();
+        $user_update = $value->getUser_update();
+        
+
+        $conn = new Connect();
+        $conn->getConnection();
+
+        $pstm = $conn->execSql($query);
+        $pstm->bind_param("iiiss", $despesa_fixa_id, $mes_id, $ano, $valor_pago, $user_update);
+        
+        if($pstm->execute())
+            return true;
+        else
+            return false;
+    }
+
     public function delete(Despesas_FixasVO $value){
         $query = "DELETE FROM `despesas_fixas` WHERE `id_despesa_fixa` = ?";
 

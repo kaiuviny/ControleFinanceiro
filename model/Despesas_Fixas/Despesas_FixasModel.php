@@ -16,6 +16,12 @@ class Despesas_FixasModel{
         return $dao->update($value);
     }
 
+    public function updatePaymentModel(Despesas_FixasVO $value){
+        $value->setValor(str_replace(',', '.', str_replace("R$ ", "", $value->getValor())));
+        $dao = new Despesas_FixasDAO();
+        return $dao->updatePayment($value);
+    }
+
     public function deleteModel(Despesas_FixasVO $value){
         $dao = new Despesas_FixasDAO();
         return $dao->delete($value);

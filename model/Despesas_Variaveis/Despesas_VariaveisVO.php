@@ -28,6 +28,13 @@ class Despesas_VariaveisVO{
         $this->id_despesa_variavel = $id_despesa_variavel;
     }
 
+    public function getDia(){
+        return $this->dia;
+    }
+    public function setDia($dia){
+        $this->dia = $dia;
+    }
+
     public function getMes_id(){
         return $this->mes_id;
     }
@@ -38,6 +45,7 @@ class Despesas_VariaveisVO{
     public function getAno(){
         return $this->ano;
     }
+    
     public function setAno($ano){
         $this->ano=$ano;
     }

@@ -13,13 +13,12 @@ $queryCategoria = "SELECT
                  AND `active` = 'Y';";
 $resultCategoria = mysqli_query($link, $queryCategoria);
 //traz o mes recorrente
-$queryMesCorrente = "SELECT `mes` FROM `mes` WHERE `id_mes` = " . $dayMoth;
+$queryMesCorrente = "SELECT `mes` FROM `meses` WHERE `id_mes` = " . $dayMoth;
 $resultMesCorrente = mysqli_query($link, $queryMesCorrente);
 //traz todos os meses
-$queryMes = "SELECT `id_mes`, `mes` FROM `mes`;";
+$queryMes = "SELECT `id_mes`, `mes` FROM `meses`;";
 $resultMes = mysqli_query($link, $queryMes);
-
-            ?>
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -77,13 +76,13 @@ $resultMes = mysqli_query($link, $queryMes);
                                         <!-- DataTales Example -->
                                         <div class="card shadow mb-4">
                                             <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Preencha todos os campos (*) do formulário</h6>
+                                                <h6 class="m-0 font-weight-bold text-primary">Preencha todos os campos (*) obrigatorios do formulário</h6>
                                             </div>
                                             <div class="card-body">
                                                 <form class="row" name="frmLogin" id="frmLogin" method="post" action="?Controller=Despesas_Fixas&Action=salvar">
                                                         <input type="hidden" id="slcStatus" name="slcStatus" value="A pagar" />
                                                         <div class="col-md-2">
-                                                            <label class="label form-label" for="slcCategoria" id="lblCategoria">Categoria:</label>
+                                                            <label class="label form-label" for="slcCategoria" id="lblCategoria">Categoria(*):</label>
                                                             <select class="form-control" id="slcCategoria" name="slcCategoria" required>
                                                                 <option value="">--Selecione uma categoria--</option>
                                                                 <?php
@@ -94,7 +93,7 @@ $resultMes = mysqli_query($link, $queryMes);
                                                             </select>
                                                         </div>
                                                         <div class="col-md-1">
-                                                            <label class="label form-label" for="slcMes" id="lblMes">Mês:</label>
+                                                            <label class="label form-label" for="slcMes" id="lblMes">Mês(*):</label>
                                                             <select class="form-control" id="slcMes" name="slcMes" required>
                                                                 <?php
                                                                 $rsMesCorrente = mysqli_fetch_object($resultMesCorrente);
@@ -107,7 +106,7 @@ $resultMes = mysqli_query($link, $queryMes);
                                                         </div>
                                                         <div class="col-md-1">
                                                             <label class="label form-label" for="txtAno" id="lblAno">Ano:</label>
-                                                            <input class="form-control" id="txtAno" name="txtAno" type="number" value="2024" min="2020" max="2030"  required />
+                                                            <input class="form-control" id="txtAno" name="txtAno" type="number" value="<?=date('Y')?>" min="1900" max="2099"  required />
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label class="label form-label" for="txtDescricao" id="lblDescricao">Descrição:</label>
